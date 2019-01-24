@@ -61,7 +61,7 @@ class Energy(Event):
         if rng == 2:
             print("In C++, how do you dereference a pointer ?")
             answer = input()
-            if answer == '&':
+            if answer == '*':
                 print("Correct. Your energy is increased by: ", increase_by)
                 current_energy = current_energy + increase_by
             else:
@@ -69,7 +69,7 @@ class Energy(Event):
         if rng == 3:
             print("In C++, what is the symbol for pointer ?")
             answer = input()
-            if answer == '*':
+            if answer == '->':
                 print("Correct. Your energy is increased by: ", increase_by)
                 current_energy = current_energy + increase_by
             else:
