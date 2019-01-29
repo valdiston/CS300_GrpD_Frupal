@@ -1,5 +1,7 @@
 #Trung Nguyen prototype for Event
 import random
+random.seed()
+
 class Event:
     def __init__(self, name):
         self.name=name
@@ -8,22 +10,31 @@ class Energy(Event):
     def __init__(self,name):
         super().__init__(name)
     def trigger(self,current_energy,increase_by): #Randomly play 1 of the 3 type of event: Trivia, math or sudden death
-        rng = random.randint(1, 3)
+        rng = random.randint(1, 5)
         if rng ==1:
             return self.trigger_math(current_energy,increase_by)
         if rng == 2:
             return self.trigger_trivia(current_energy,increase_by)
         if rng == 3:
             return self.trigger_death(current_energy,increase_by)
+        if rng ==4 :
+            return self.trigger_rock_paper_scissor(current_energy,increase_by)
+        if rng ==5 :
+            return self.trigger_number(current_energy,increase_by)
 
     def trigger_no_sudden_death(self,current_energy,increase_by):#Randomly play 1 of the 2 type of even: Trivia or math
-        rng = random.randint(1, 2)
+        rng = random.randint(1, 4)
         if rng ==1:
             return self.trigger_math(current_energy,increase_by)
         if rng == 2:
             return self.trigger_trivia(current_energy,increase_by)
+        if rng ==3 :
+            return self.trigger_rock_paper_scissor(current_energy,increase_by)
+        if rng ==4 :
+            return self.trigger_number(current_energy,increase_by)
 
     def trigger_math(self,current_energy,increase_by):
+        print("This even will ask you to answer a math question")
         rng=random.randint(1,3)
         if rng==1:
             number1= random.randint(1,100)
@@ -58,7 +69,7 @@ class Energy(Event):
         return current_energy
 
     def trigger_trivia(self, current_energy,increase_by):
-        rng = random.randint(1, 4)
+        rng = random.randint(1, 10)
         if rng==1:
             print("In C++, what symbol you must put at the end of a statement ?")
             answer = input()
@@ -94,7 +105,7 @@ class Energy(Event):
         if rng == 5 :
             print("Which bird can fly backward ?")
             answer =input()
-            if answer.upper() == "Hummingbird":
+            if answer.capitalize() == "Hummingbird":
                 print("Correct. Your energy is increased by: ", increase_by)
                 current_energy = current_energy + increase_by
             else:
@@ -103,7 +114,7 @@ class Energy(Event):
         if rng == 6:
             print("What type of animal is a wahoo?")
             answer = input()
-            if answer.upper() == "Fish":
+            if answer.capitalize() == "Fish":
                 print("Correct. Your energy is increased by: ", increase_by)
                 current_energy = current_energy + increase_by
             else:
@@ -112,7 +123,7 @@ class Energy(Event):
         if rng == 6:
             print("What type of animal is a horny toad?")
             answer = input()
-            if answer.upper() == "Lizard":
+            if answer.capitalize() == "Lizard":
                 print("Correct. Your energy is increased by: ", increase_by)
                 current_energy = current_energy + increase_by
             else:
@@ -121,7 +132,7 @@ class Energy(Event):
         if rng == 7:
             print("What type of animal is a mountain chicken ?")
             answer = input()
-            if answer.upper() == "Frog":
+            if answer.capitalize() == "Frog":
                 print("Correct. Your energy is increased by: ", increase_by)
                 current_energy = current_energy + increase_by
             else:
@@ -148,7 +159,7 @@ class Energy(Event):
         if rng == 9:
             print("What is the name of the university that Bill Gate dropped out of")
             answer = input()
-            if answer.upper() == "Havard":
+            if answer.capitalize() == "Havard":
                 print("Correct. Your energy is increased by: ", increase_by)
                 current_energy = current_energy + increase_by
             else:
@@ -157,7 +168,7 @@ class Energy(Event):
         if rng == 10:
             print("In a regular deck of cards, which is the only king without a moustache ?")
             answer = input()
-            if answer.upper() == "Heart":
+            if answer.capitalize() == "Heart":
                 print("Correct. Your energy is increased by: ", increase_by)
                 current_energy = current_energy + increase_by
             else:
@@ -170,7 +181,7 @@ class Energy(Event):
         if rng == 1:
             print("A cute fuzzy animal comes up to you. Do you touch it or not. Y/N")
             answer = input()
-            if answer.upper() == "Y":
+            if answer.capitalize() == "Y":
                 print("You got brutally murdered by the animal. Game over")
                 current_energy = 0
             else:
@@ -178,7 +189,7 @@ class Energy(Event):
         if rng == 2:
             print("You found the game developers. Do you want to die? Y/N")
             answer = input()
-            if answer.upper() == "N":
+            if answer.capitalize() == "N":
                 print("You got brutally murdered . Game over")
                 current_energy = 0
             else:
@@ -201,9 +212,9 @@ class Energy(Event):
         answer=input();
 
         #Assign hand for user
-        if answer.upper() == "R":
+        if answer.capitalize() == "R":
             user = "Rock"
-        elif answer.upper() == "P":
+        elif answer.capitalize() == "P":
             user = "Paper"
         else:
             user = "Scissor"
@@ -250,6 +261,49 @@ class Energy(Event):
                 print("You played Scissor and the computer played Rock. You lose")
         return current_energy
 
+    def trigger_number(self,current_energy,increase_by):
+        print("This even will make you guess a random number")
+        print("Choose your difficult: ")
+        print("1-Easy. Half the reward")
+        print("2-Medium. No modification to the reward")
+        print("3-Hard. Double the reward")
+        choice = int(input())
+        while choice <1 or choice >3 :
+            print("Invalid choice!!")
+            choice= int(input())
+        if choice == 1:
+            print("You chose Easy difficult")
+            rng = random.randint(1,2)
+            print("I'm thinking a number between 1 and 2. Guess which number I'm thinking of")
+            answer=int(input())
+            if answer == rng:
+                print("Correct ! Your energy is increase by: ",int(increase_by/2))
+                current_energy = current_energy + int(increase_by/2)
+            else:
+                print ("Incorrect! You missed your chance")
+
+        if choice == 2:
+            print("You chose Medium difficult")
+            rng = random.randint(1,3)
+            print("I'm thinking a number between 1 and 3. Guess which number I'm thinking of")
+            answer=int(input())
+            if answer == rng:
+                print("Correct ! Your energy is increase by: ",increase_by)
+                current_energy += increase_by
+            else:
+                print ("Incorrect! You missed your chance")
+
+        if choice == 3:
+            print("You chose Hard difficult")
+            rng = random.randint(1,4)
+            print("I'm thinking a number between 1 and 4. Guess which number I'm thinking of")
+            answer=int(input())
+            if answer == rng:
+                print("Correct ! Your energy is increase by: ",increase_by*2)
+                current_energy = current_energy + increase_by * 2
+            else:
+                print ("Incorrect! You missed your chance")
+        return current_energy
 
 
 
@@ -257,7 +311,7 @@ def main():
     Energy1 = Energy("Event")
     current_energy =50
     increase_by =15
-    current_energy=Energy1.trigger_rock_paper_scissor(current_energy, increase_by)
+    current_energy=Energy1.trigger(current_energy, increase_by)
     print("Your current energy is: ",current_energy)
     if current_energy == 0:
         print("You're dead")
