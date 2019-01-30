@@ -1,3 +1,18 @@
+
+class Player:
+
+    def __init__(self):
+        self.money = 0
+        self.energy = 0
+        self.location = [0, 0]
+        self.ItemDict = {"obj1": {"attr 1": 0, "attr 2": 0},
+                         "obj2": {"attr 1": 0, "attr 2": 0},
+                         "obj3": {"attr 1": 0, "attr 2": 0}}
+        self.terrainDict = {"terrain1": {"energy": 1, "item": None, "item energy": 0},
+                            "terrain2": {"energy": 1, "item": None, "item energy": 0},
+                            "terrain3": {"energy": 1, "item": None, "item energy": 0}}
+
+
 """ Map Configurations """
 MAP_SIZE = 20
 
