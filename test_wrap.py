@@ -1,7 +1,11 @@
+from mapMaker import *
+
 """ Map Configurations """
 MAP_SIZE = 20
 
-reference_map = [ ["҉"] * MAP_SIZE for i in range(MAP_SIZE) ]
+#dummy list of user added terrain
+extraTerrain = ["forest", "rocks"]
+reference_map = mapMaker(MAP_SIZE, extraTerrain)
         
 island_map  = [ [0]* MAP_SIZE for i in range(MAP_SIZE) ]
 
@@ -25,7 +29,6 @@ def display():
             else:
                 print(str(' '), end=' ')
         print("")
-
 
 def controls():
     print(  "Please enter   w   to walk\n"
