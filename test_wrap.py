@@ -2,15 +2,56 @@
 class Player:
 
     def __init__(self):
+        """ Integer variables - Status """
         self.money = 0
         self.energy = 0
+        self.gems = 0
+
+        """ Current Location """
         self.location = [0, 0]
+
+        """ Item/Map Properties """
         self.ItemDict = {"obj1": {"attr 1": 0, "attr 2": 0},
                          "obj2": {"attr 1": 0, "attr 2": 0},
                          "obj3": {"attr 1": 0, "attr 2": 0}}
         self.terrainDict = {"terrain1": {"energy": 1, "item": None, "item energy": 0},
                             "terrain2": {"energy": 1, "item": None, "item energy": 0},
                             "terrain3": {"energy": 1, "item": None, "item energy": 0}}
+
+        """ Inventory - Collected Items """
+        self.inventory = [{"item": 0}]
+
+    def add_to_inventory(self, item):
+        if item is not None:
+            for i in range(self.inventory.__len__()):
+                if item in self.inventory[i]:
+                    return 0
+            to_add = {item: 0}
+            self.inventory.append(to_add)
+            return 1
+        else:
+            return -1
+
+    def add_item(self, item):
+        if item is None:
+            return -1
+        for i in range(self.inventory.__len__()):
+            if item in self.inventory[i]:
+                self.inventory[i][item] += 1
+                return 1
+        to_add = {item: 1}
+        self.inventory.append(to_add)
+        return 1
+
+    def use_item(self, item):
+        for i in range(self.inventory.__len__()):
+            if item in self.inventory[i]:
+                if self.inventory[i][item] > 0:
+                    self.inventory[i][item] -= 1
+                    return 1
+                else:
+                    return -1
+        return -1
 
 
 """ Map Configurations """
@@ -29,6 +70,7 @@ Obs = {"0": {"energy": 1, "item": "", "item energy": ""},
        "g": {"energy": 2, "item": "", "item energy": ""},
        "s": {"energy": 2, "item": "", "item energy": ""},
        "҉": {"energy": 1, "item": None, "item energy": ""}}
+
 
 def display():
     for i in range(0, MAP_SIZE):
@@ -52,6 +94,7 @@ def controls():
 
 def checkObstacle(coordniates, reference): #skeleton of a function to check energy needed for a move based on object
 
+    return Obs[reference_map[coordinates[0][0]][coordinates[1][0]]]["energy"]
         # nextPosit = reference[current_x][current_y]
         # if reference_map[coordinates[0][0]][coordinates[1][0]] == 0:
         #     return 1
@@ -68,11 +111,27 @@ def checkObstacle(coordniates, reference): #skeleton of a function to check ener
         # if Obs[reference_map[coordinates[0][0]][coordinates[1][0]]]["item"] is None:
         #     print("This obj doesn't require an item. obj = ", str(reference_map[coordinates[0][0]][coordinates[1][0]]),
         #           str(Obs[reference_map[coordinates[0][0]][coordinates[1][0]]]))
-        return Obs[reference_map[coordinates[0][0]][coordinates[1][0]]]["energy"]
 
 
 def main():    
     print("""Welcome to the Game!""")
+
+    p = Player()
+    print("inventory = ", p.inventory)
+    ret = p.add_to_inventory("chainsaw")
+    print("return = ", ret, "inventory = ", p.inventory)
+    ret = p.add_item("chainsaw")
+    print("return = ", ret, "inventory = ", p.inventory)
+    ret = p.add_item("chainsaw")
+    print("return = ", ret, "inventory = ", p.inventory)
+    ret = p.use_item("chainsaw")
+    print("return = ", ret, "inventory = ", p.inventory)
+    ret = p.use_item("chainsaw")
+    print("return = ", ret, "inventory = ", p.inventory)
+    ret = p.use_item("chainsaw")
+    print("return = ", ret, "inventory = ", p.inventory)
+
+    exit()
 
     """placeholder variables"""
     energy = 10
@@ -159,6 +218,7 @@ def main():
             print("Try a valid command""")
             
         display()
-        
+
+
 if __name__ == '__main__':
     main()
