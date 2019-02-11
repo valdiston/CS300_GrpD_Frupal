@@ -1,7 +1,12 @@
+from mapMaker import *
+import Player
+
 """ Map Configurations """
 MAP_SIZE = 20
 
-reference_map = [ ["҉"] * MAP_SIZE for i in range(MAP_SIZE) ]
+# dummy list of user added terrain
+extraTerrain = ["forest", "rocks"]
+reference_map = mapMaker(MAP_SIZE, extraTerrain)
         
 island_map  = [ [0]* MAP_SIZE for i in range(MAP_SIZE) ]
 
@@ -20,7 +25,6 @@ def display():
                 print(str(' '), end=' ')
         print("")
 
-
 def controls():
     print(  "Please enter   w   to walk\n"
           + "             a s d\n"
@@ -29,25 +33,10 @@ def controls():
           + "Press x to display map")
 
 
-def checkObstacle(coordniates, reference): #skeleton of a function to check energy needed for a move based on object
-
-        # nextPosit = reference[current_x][current_y]
-        if reference_map[coordinates[0][0]][coordinates[1][0]] == 0:
-            return 1
-        elif reference_map[coordinates[0][0]][coordinates[1][0]] == 'w':
-            return 2
-        elif reference_map[coordinates[0][0]][coordinates[1][0]] == 'g':
-            return 1
-        elif reference_map[coordinates[0][0]][coordinates[1][0]] == 's':
-            return 2
-        elif reference_map[coordinates[0][0]][coordinates[1][0]] == '҉':
-            return 1
-        else:
-            return 1
-
-
 def main():    
     print("""Welcome to the Game!""")
+
+    # p = Player()
 
     """placeholder variables"""
     energy = 10
@@ -74,10 +63,11 @@ def main():
         #Walking North
         elif choice == 'w':
             if coordinates[0][0] > 0:
-                cost = checkObstacle(coordinates[0][0]-1, reference_map)
+                # cost = checkObstacle(coordinates[0][0]-1, reference_map)
+                cost = 0
                 if cost < energy:
                     energy -= cost
-                    print("This move cost you" + str(cost) + " energy. You have " + str(energy) + " energy left")
+                    print("This move cost you " + str(cost) + " energy. You have " + str(energy) + " energy left")
                     coordinates[0][0] = coordinates[0][0] - 1
                 else:
                     print("You don't have enough energy to mover here")
@@ -88,10 +78,11 @@ def main():
         #Walking South
         elif choice == 's': 
             if coordinates[0][0] < MAP_SIZE - 1:
-                cost = checkObstacle(coordinates[0][0] + 1, reference_map)
+                # cost = checkObstacle(coordinates[0][0] + 1, reference_map)
+                cost = 0
                 if cost < energy:
                     energy -= cost
-                    print("This move cost you" + str(cost) + " energy. You have " + str(energy) + " energy left")
+                    print("This move cost you " + str(cost) + " energy. You have " + str(energy) + " energy left")
                     coordinates[0][0] = coordinates[0][0] + 1
                 else:
                     print("You don't have enough energy to mover here")
@@ -103,10 +94,11 @@ def main():
         #Walking East
         elif choice == 'a':
             if coordinates[1][0] > 0:
-                cost = checkObstacle(coordinates[1][0] - 1, reference_map)
+                # cost = checkObstacle(coordinates[1][0] - 1, reference_map)
+                cost = 0
                 if cost < energy:
                     energy -= cost
-                    print("This move cost you" + str(cost)+ " energy. You have " + str(energy) + " energy left")
+                    print("This move cost you " + str(cost)+ " energy. You have " + str(energy) + " energy left")
                     coordinates[1][0] = coordinates[1][0] - 1
                 else:
                     print("You don't have enough energy to mover here")
@@ -118,10 +110,11 @@ def main():
         #Walking West
         elif choice == 'd':
             if coordinates[1][0] < MAP_SIZE - 1:
-                cost = checkObstacle(coordinates[1][0] - 1, reference_map)
+                # cost = checkObstacle(coordinates[1][0] - 1, reference_map)
+                cost = 0
                 if cost < energy:
                     energy -= cost
-                    print("This move cost you" + str(cost) + " energy. You have " + str(energy) + " energy left")
+                    print("This move cost you " + str(cost) + " energy. You have " + str(energy) + " energy left")
                     coordinates[1][0] = coordinates[1][0] + 1
                 else:
                     print("You don't have enough energy to mover here")
@@ -134,6 +127,7 @@ def main():
             print("Try a valid command""")
             
         display()
-        
+
+
 if __name__ == '__main__':
     main()
