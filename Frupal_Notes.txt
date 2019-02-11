@@ -1,6 +1,6 @@
 CSV Layout Example
 
-// It's own thing
+// Its own thing
 Energy, 0
 MapSize, 5
 Gold, 0
