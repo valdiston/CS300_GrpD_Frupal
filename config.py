@@ -23,8 +23,8 @@ def edit_csv():
 			print(k + ": " + v)
 			# Enter a number to change the value
 			newVal = input("Please input the new value, or re-enter the old value: ")
-			myDict[k] = newVal
-			print()
+			if (str.isdigit(newVal) myDict[k] = newVal
+			print() # New line to separate items
 		# Call the function to write the file
 	print("Finished editing map size, starting gold and currency, and item values.")
 	write_csv(myDict)
