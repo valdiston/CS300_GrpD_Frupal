@@ -23,7 +23,7 @@ def edit_csv():
 			print(k + ": " + v)
 			# Enter a number to change the value
 			newVal = input("Please input the new value, or re-enter the old value: ")
-			if (str.isdigit(newVal) myDict[k] = newVal
+			if str.isdigit(newVal): myDict[k] = newVal
 			print() # New line to separate items
 		# Call the function to write the file
 	print("Finished editing map size, starting gold and currency, and item values.")
@@ -41,25 +41,30 @@ def write_csv(x):
 		
 # Read String/(String,Integer) file into Dictionary, then edits
 # Used for obstacle, terrain, energy cost
-def edit_csv_tuple()
-	with open('config.csv', mode='r', newline='') as infile:
+def edit_csv_tuple():
+	with open('obstacle_items.csv', mode='r', newline='') as infile:
 		reader = csv.reader(infile)
 	# with open('config.csv', mode = 'w') as outfile:
 		# writer = csv.writer(outfile)
 		next(reader)
-		myDict = {rows[0]:rows[1] for rows in reader}
+		myDict = {rows[0]:(rows[1],rows[2]) for rows in reader}
 	for k,v in myDict.items():
 		# Output each dictionary item
-		if str.isdigit(v):
-			print(k + ": " + v)
+		if str.isdigit(v[1]):
+			print(k + ": " + v[1])
 			# Enter a number to change the value
 			newVal = input("Please input the new value, or re-enter the old value: ")
-			if (str.isdigit(newVal) myDict[k] = newVal
+			if str.isdigit(newVal): myDict[k] = (v[0],newVal)
 			print() # New line to separate items
 		# Call the function to write the file
 	print("Finished editing map size, starting gold and currency, and item values.")
 	write_csv_tuple(myDict)	
 	
-def write_csv_tuple()
-
+def write_csv_tuple(x):
+	with open('obstacle_items.csv', mode = 'w') as csv_file:
+		fieldnames = ['item', 'terrain', 'energy']
+		new_writer = csv.DictWriter(csv_file,delimiter=',', lineterminator='\n', fieldnames=fieldnames)
+		new_writer.writeheader()
+		for k,v in x.items():
+			new_writer.writerow({'item': k, 'terrain': v[0], 'energy':v[1]})
 # End File
