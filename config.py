@@ -24,7 +24,9 @@ def edit_csv():
 			# Enter a number to change the value
 			newVal = input("Please input the new value, or re-enter the old value: ")
 			myDict[k] = newVal
+			print()
 		# Call the function to write the file
+	print("Finished editing map size, starting gold and currency, and item values.")
 	write_csv(myDict)
 
 # Write the dictionary with the new values into the CSV file 
