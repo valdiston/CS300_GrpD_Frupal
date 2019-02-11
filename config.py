@@ -20,7 +20,7 @@ def edit_csv():
 	for k,v in myDict.items():
 		# Output each dictionary item
 		if str.isdigit(v):
-			print(k + ": " + v + '\n')
+			print(k + ": " + v)
 			# Enter a number to change the value
 			newVal = input("Please input the new value, or re-enter the old value: ")
 			myDict[k] = newVal
