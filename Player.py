@@ -1,3 +1,9 @@
+import mapMaker
+import clueMaker
+import Event
+import config
+import random
+
 class Player:
 
     def __init__(self):
@@ -7,6 +13,10 @@ class Player:
         self.gems = 0
         # default field of view
         self.view = 1
+
+        """ Map Variables """
+        self.mapSize = 0
+        self.refMap = None
 
         """ Current Location """
         self.location = [0, 0]
@@ -21,6 +31,10 @@ class Player:
 
         """ Inventory - Collected Items """
         self.inventory = {}  # format: {"item1": x, "item2": y, }
+
+    def setup(self):
+        # todo fill keyDict, ItemDict, terrainDict, and inventory prior to setting up map
+        self.refMap = mapMaker.mapMaker(self.mapSize, self.terrainDict)
 
     """ Key related functionss"""
 
@@ -137,7 +151,8 @@ class Player:
                         self.view += self.ItemDict[key]["vision"]
                         if key == "binoculars":
                             self.add_to_inventory(key)
-                            print("You have just found a ", key, "  and added it to your inventory")
+                            print("You have just found a pair of", key, "  and added it to your inventory")
+                            print("Your vision radius has increased to %s" % self.view)
                             self.location = coords
                             return 1
                     self.add_to_inventory(key)
@@ -150,7 +165,7 @@ class Player:
             elif key in self.terrainDict:
                 ecost = self.terrainDict[key]["energy"]
                 item = self.terrainDict[key]["item"]
-                ienrg = self.terrainDict[key]["iterm"]
+                ienrg = self.terrainDict[key]["item energy"]
                 if item is not None:
                     if self.inventory[item] >= 1:
                         answer = input("You can use your " + item + " to reduce the energy cost of this move to " +
@@ -182,8 +197,20 @@ class Player:
 
             # block for stepping on an event
             elif key == "event":
-                # todo: add event stuff here
-                return 0
+                self.location = coords
+                print("You have encountered an event!")
+                event = Event.Energy("event")
+                eventType = random.randint(1, 2)
+                if eventType == 1: # 1 signifies energy event
+                    newEnrg = random.randint(5, 15)
+                    self.energy = event.trigger(self.energy, newEnrg)
+                    return 1
+                elif eventType == 2: # 2 signifies money event
+                    newMoney = random.randint(5, 15)
+                    self.money = event.trigger(self.money, newMoney)
+                    return 1
+                else:
+                    return 0
 
             # block for stepping on a clue
             elif key == "clue":
