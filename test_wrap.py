@@ -7,7 +7,10 @@ MAP_SIZE = 20
 # dummy list of user added terrain
 extraTerrain = ["forest", "rocks"]
 reference_map = mapMaker(MAP_SIZE, extraTerrain)
-        
+
+""" Manual Test Map """
+# reference_map = [['e'] * MAP_SIZE for i in range(MAP_SIZE)]
+
 island_map  = [ [0]* MAP_SIZE for i in range(MAP_SIZE) ]
 
 """ Status of Hero """
@@ -36,7 +39,13 @@ def controls():
 def main():    
     print("""Welcome to the Game!""")
 
-    # p = Player()
+    """ Testing Player class creation"""
+    # p = Player.Player()
+    # dictList = [{"e":"event"}, {"c":"clue"}, {"g":"grass"}]
+    # p.initKeys(dictList)
+
+
+
 
     """placeholder variables"""
     energy = 10
@@ -76,7 +85,10 @@ def main():
                 print("You have stepped on uncrossable water! You lost 1 energy as you were swept back ashore")
                 
         #Walking South
-        elif choice == 's': 
+        elif choice == 's':
+            """ Testing Events """
+            # if p.location[1] < MAP_SIZE - 1:
+            #     p.move_to([p.location[0],p.location[1] + 1], reference_map)
             if coordinates[0][0] < MAP_SIZE - 1:
                 # cost = checkObstacle(coordinates[0][0] + 1, reference_map)
                 cost = 0
