@@ -110,7 +110,7 @@ class Player:
     """ Movement Functions """
 
     def move_to(self, coords, referenceMap):
-        key = self.getKey(referenceMap[coords[0], coords[1]])
+        key = self.getKey(referenceMap[coords[0]][coords[1]])
         if key == -1:
             return -1
         else:
@@ -215,7 +215,12 @@ class Player:
             # block for stepping on a clue
             elif key == "clue":
                 # todo: add clue handling if clues are implemented
-                return 0
+                jewelList, clueList, terrainList, jewelString, terrainString = clueMaker.generateClues(referenceMap)
+                for item in clueList:
+                    if item[0] == coords[0] and item[1] == coords[1]:
+                        print(jewelString[clueList.index(item)], terrainString[clueList.index(item)])
+                self.location = coords
+                return 1
 
             else:
                 return -1
