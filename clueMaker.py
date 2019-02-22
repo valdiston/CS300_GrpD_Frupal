@@ -80,13 +80,25 @@ def distFromCoord(fromList, toList):
 
     return direction, distance
 
-#takes a list of coordinates, and the max distance the new coordinates could be
+#takes a list of coordinates, the max distance the new coordinates could be, and a list of the last related direction
+#to avoid  repetion in the same direction for the terrain proof and the jewel
 #iterates through a list and creates a new coordinate for every item
 #returns a new list of coordinates
-def randGenDirection(list, distance):
+def randGenDirection(list, distance, lastDirec, mapSize):
     newList = []
     for item in list:
         randDirNum = random.randint(0, 3)
+
+        if (lastDirec[list.index(item)] == 0 and randDirNum == 2):
+            randDirNum = int(random.choice('013'))
+        if (lastDirec[list.index(item)] == 1 and randDirNum == 3):
+            randDirNum = int(random.choice('012'))
+        if (lastDirec[list.index(item)] == 2 and randDirNum == 0):
+            randDirNum = int(random.choice('123'))
+        if (lastDirec[list.index(item)] == 3 and randDirNum == 1):
+            randDirNum = int(random.choice('023'))
+
+
         if (randDirNum == 0):
             newCoord = getNewCoord("North", item, mapSize, distance)
         if (randDirNum == 1):
@@ -99,10 +111,29 @@ def randGenDirection(list, distance):
         newList += [newCoord]
     return newList
 
+def randGenDirectionFirst(list, distance, mapSize):
+    newList = []
+    directionList = []
+    for item in list:
+        randDirNum = random.randint(0, 3)
+        directionList += [randDirNum]
+
+        if (randDirNum == 0):
+            newCoord = getNewCoord("North", item, mapSize, distance)
+        if (randDirNum == 1):
+            newCoord = getNewCoord("East", item, mapSize, distance)
+        if (randDirNum == 2):
+            newCoord = getNewCoord("South", item, mapSize, distance)
+        if (randDirNum == 3):
+            newCoord = getNewCoord("West", item, mapSize, distance)
+
+        newList += [newCoord]
+    return newList, directionList
+
 #takes three lists of coordinates and an option for real terrain direction and fake
 #Creates the strings used to display the direction and distance away from the jewels and the terrain block
 #returns newly created strings
-def createStringLists(jewelList, clueList, terrainList, real):
+def createStringLists(islandMap, jewelList, clueList, terrainList, real):
     jewelString = []
     terrainString = []
     for i in range(0, len(jewelList)):
@@ -111,11 +142,11 @@ def createStringLists(jewelList, clueList, terrainList, real):
         jewelString += ["A Jewel is " + str(jewelDist) + " to the " + jewelDir]
         if(real == True):
             terrainString += ["The block " + str(terrainDist) + " blocks to the " + terrainDir +
-                          " is a: " + findTerrain(hiddenMap, terrainList[i])]
+                          " is a: " + findTerrain(islandMap, terrainList[i])]
         else:
             randTerrainOptions = 'pwgue'
             randTerrain = random.choice(randTerrainOptions)
-            while(randTerrain == findTerrain(hiddenMap, terrainList[i])):
+            while(randTerrain == findTerrain(islandMap, terrainList[i])):
                 randTerrain = random.choice(randTerrainOptions)
             terrainString += ["The block " + str(terrainDist) + " blocks to the " + terrainDir +
                               " is a: " + randTerrain]
@@ -138,15 +169,17 @@ def fakeJewels(fakeClueAmount, originalMap):
 
 #main function that produces everything
 #returns 3 lists to all coordinates and strings to be used when stepping on a clue
-def generateClues(islandMap):
-    jewelList = findJewels(hiddenMap)
-    clueList = randGenDirection(jewelList, len(islandMap))
-    terrainList = randGenDirection(clueList, 5)
-    jewelString, terrainString = createStringLists(jewelList, clueList, terrainList, True)
-    fakeJewelList = fakeJewels(0, hiddenMap)
-    fakeClueList = randGenDirection(fakeJewelList, mapSize)
-    fakeTerrainList = randGenDirection(fakeClueList, 5)
-    fakeJewelString, fakeTerrainString = createStringLists(fakeJewelList, fakeClueList, fakeTerrainList, False)
+#takes a map of the island, the amount of fake clues the user would like, and the maximum distance
+#the terrain proofs should spawn away from the clue
+def generateClues(islandMap, fakeJewelAmount, maxTerrainDist):
+    jewelList = findJewels(islandMap)
+    clueList, jewelDirec = randGenDirectionFirst(jewelList, len(islandMap), len(islandMap))
+    terrainList = randGenDirection(clueList, maxTerrainDist, jewelDirec, len(islandMap))
+    jewelString, terrainString = createStringLists(islandMap, jewelList, clueList, terrainList, True)
+    fakeJewelList = fakeJewels(fakeJewelAmount, islandMap)
+    fakeClueList, fakeJewelDirec = randGenDirectionFirst(fakeJewelList, len(islandMap), len(islandMap))
+    fakeTerrainList = randGenDirection(fakeClueList, maxTerrainDist, fakeJewelDirec, len(islandMap))
+    fakeJewelString, fakeTerrainString = createStringLists(islandMap, fakeJewelList, fakeClueList, fakeTerrainList, False)
     jewelList += fakeJewelList
     clueList += fakeClueList
     terrainList += fakeTerrainList
@@ -161,36 +194,42 @@ def clueMap(clueList, islandMap):
         islandMap[item[0]][item[1]] = 'c'
     return islandMap
 
-mapSize = 30
-hiddenMap = mapMaker.mapMaker(mapSize, "forest")
+islandMap = mapMaker.mapMaker(30, "forest")
 
-hiddenMap[12][12] = 'j'
-hiddenMap[15][15] = 'j'
+'''islandMap[12][12] = 'j'
+islandMap[15][15] = 'j'
+islandMap[1][1] = 'j'
+islandMap[2][2] = 'j'
+'''
 
+#returns a list of coordinates for the corresponding jewel locations, clue locations, terrain locations, and strings
+#that say where the jewels and terrain block is from the clue.
+#generate clues takes the map of terrain, the amount of fake clues wanted, and the maximum distance needed to walk to
+#prove a clue is true
+jewelList, clueList, terrainList, jewelString, terrainString = generateClues(islandMap, 0, 5)
 
-jewelList, clueList, terrainList, jewelString, terrainString = generateClues(hiddenMap)
+#clueMap takes the map of terrain and replaces the coordinates where there should be a clue with a 'c'
+clueIsland = clueMap(clueList, islandMap)
 '''print(jewelList)
 print(clueList)
 print(terrainList)
 print(jewelString)
 print(terrainString)'''
 
-clueIsland = clueMap(clueList, hiddenMap)
-'''for t in range(mapSize):
-    print ()
-    for j in range(mapSize):
-        print (clueIsland[t][j], end="")'''
 
-print('\n')
-for item in jewelList:
+'''for item in jewelList:
     print("A Clue is at: ", clueList[jewelList.index(item)])
     print("A Jewel is at: ", item)
     print("A Terrain block for proof is at: ", terrainList[jewelList.index(item)])
     print(jewelString[jewelList.index(item)])
     print(terrainString[jewelList.index(item)])
-    print('\n')
+    print('\n')'''
+
 
 #use in full program should be used something like this
+#every time the player moves onto a new coordinates, compare the coordinates with every spot in the clueList.
+#If the coordinates match, the same index in the jewelString and terrainString contain the corresponding information
+#for the clue.
 '''playerCoord = [2,3]
 for item in clueList:
     if(item[0] == playerCoord[0] and item[1] == playerCoord[1]):
