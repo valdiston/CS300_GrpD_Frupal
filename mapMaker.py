@@ -142,6 +142,52 @@ def openSpace(map, row, col):
         free = False
     return free
 
+def intro():
+    print ("\nWelcome to the island of Frupal\n")
+    print ("Somewhere on frupal there are jewels and it is your job to find them!")
+    print ("Walking around the island is hard work and saps you of your energy.")
+    print ("If you run out of energy before finding the jewels you lose and die alone.")
+    print ("Even worse, some terrain is tougher to walk through and saps you of even more energy!")
+    print ("Luckily you have gold and can buy items like chainsaws and boats to make things easier on you.")
+
+    print ("Would you like an Easy, Medium or Hard game...Or would you like to make your own game?") 
+    pick = False
+    while pick == False:
+        print ("[1]Easy\n[2]Medium\n[3]Hard\n[4]Create New Game")
+        game = input("Enter Number: ")
+        if game.isnumeric():
+            if int(game) >= 1 and int(game) <= 4:
+                pick = True
+            else:
+                print ("\nJust a number between 1 and 4 please\n") 
+        else:
+            print ("\nThose aren't even numbers. How are you going to survive on Frupal??")
+            print ("Just a number between 1 and 4 please\n") 
+    
+    return game
+
+
+def loadGame(game, player):
+    if game == 1:
+        load("easy", player)
+    if game == 2:
+        load("medium", player)
+    if game == 3:
+        load("hard", player)
+    if game == 4:
+        #circle back and do an input check
+        title = input("what do you want your game to be called: ")
+        #edit_csv()
+        #edit_csv_tuple()
+        load(title, player)
+
+
+def load(fileName, player):
+    #open up file and set up player and map
+
+
+
+
 """
 #display function for testing
 mapSize = 30
