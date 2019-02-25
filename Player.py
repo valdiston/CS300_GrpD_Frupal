@@ -4,6 +4,7 @@ import Event
 import config
 import random
 
+
 class Player:
 
     def __init__(self):
@@ -109,7 +110,7 @@ class Player:
 
     """ Movement Functions """
 
-    def move_to(self, coords, referenceMap):
+    def move_to(self, coords, referenceMap, clues):
         key = self.getKey(referenceMap[coords[0]][coords[1]])
         if key == -1:
             return -1
@@ -119,8 +120,8 @@ class Player:
                 print("You have come across a ", key, " during your journey")
                 if key == "gem":
                     self.gems += 1
-                    # todo include way to remove/replace symbol on ref map
                     self.location = coords
+                    referenceMap[coords[0]][coords[1]] = 'g'
                     return 1
 
                 elif self.ItemDict[key]["cost"] > 0:
@@ -130,9 +131,9 @@ class Player:
                         if self.money >= cost:
                             self.add_to_inventory(key)
                             self.money -= cost
-                            # todo include way to remove/replace symbol on ref map
                             print("You have just bought a ", key, "  and added it to your inventory")
                             self.location = coords
+                            referenceMap[coords[0]][coords[1]] = 'g'
                             return 1
                         else:
                             print("Sorry! You don't have enough money to purchase this item... Please come back when"
@@ -154,11 +155,12 @@ class Player:
                             print("You have just found a pair of", key, "  and added it to your inventory")
                             print("Your vision radius has increased to %s" % self.view)
                             self.location = coords
+                            referenceMap[coords[0]][coords[1]] = 'g'
                             return 1
                     self.add_to_inventory(key)
-                    # todo include way to remove/replace symbol on ref map
                     print("You have just found a ", key, "  and added it to your inventory")
                     self.location = coords
+                    referenceMap[coords[0]][coords[1]] = 'g'
                     return 1
 
             # block for stepping on terrain
@@ -198,14 +200,15 @@ class Player:
             # block for stepping on an event
             elif key == "event":
                 self.location = coords
+                referenceMap[coords[0]][coords[1]] = 'g'
                 print("You have encountered an event!")
                 event = Event.Energy("event")
                 eventType = random.randint(1, 2)
-                if eventType == 1: # 1 signifies energy event
+                if eventType == 1:  # 1 signifies energy event
                     newEnrg = random.randint(5, 15)
                     self.energy = event.trigger(self.energy, newEnrg)
                     return 1
-                elif eventType == 2: # 2 signifies money event
+                elif eventType == 2:  # 2 signifies money event
                     newMoney = random.randint(5, 15)
                     self.money = event.trigger(self.money, newMoney)
                     return 1
@@ -214,11 +217,16 @@ class Player:
 
             # block for stepping on a clue
             elif key == "clue":
-                # todo: add clue handling if clues are implemented
-                jewelList, clueList, terrainList, jewelString, terrainString = clueMaker.generateClues(referenceMap)
-                for item in clueList:
-                    if item[0] == coords[0] and item[1] == coords[1]:
-                        print(jewelString[clueList.index(item)], terrainString[clueList.index(item)])
+                for clue in clues:
+                    if clue[0][0] == coords[0] and clue[0][1] == coords[1]:
+                        print("You Have found a clue to the location of a gem!")
+                        print("The clue reads: ", clue[1])
+                        print("There's a chance this clue could be fake. If the following statement is true, the clue"
+                              " is correct")
+                        print(clue[2])
+                        clues.pop(clues.index(clue))
+                        referenceMap[coords[0]][coords[1]] = 'g'
+                        break
                 self.location = coords
                 return 1
 
