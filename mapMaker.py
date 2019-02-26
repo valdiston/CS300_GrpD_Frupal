@@ -121,6 +121,7 @@ def getMapObject(addedTerrain):
     luckyNumber = random.randrange(0,100)
     if addedTerrain != 0:
         if luckyNumber < 35:
+            pass
            #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
            #find another lucky number depending on how many terrains
            #were added and return the corresponding char.

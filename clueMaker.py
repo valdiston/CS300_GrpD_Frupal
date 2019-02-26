@@ -194,7 +194,7 @@ def clueMap(clueList, islandMap):
         islandMap[item[0]][item[1]] = 'c'
     return islandMap
 
-islandMap = mapMaker.mapMaker(30, "forest")
+# islandMap = mapMaker.mapMaker(30, "forest")
 
 '''islandMap[12][12] = 'j'
 islandMap[15][15] = 'j'
@@ -206,10 +206,10 @@ islandMap[2][2] = 'j'
 #that say where the jewels and terrain block is from the clue.
 #generate clues takes the map of terrain, the amount of fake clues wanted, and the maximum distance needed to walk to
 #prove a clue is true
-jewelList, clueList, terrainList, jewelString, terrainString = generateClues(islandMap, 0, 5)
+# jewelList, clueList, terrainList, jewelString, terrainString = generateClues(islandMap, 0, 5)
 
 #clueMap takes the map of terrain and replaces the coordinates where there should be a clue with a 'c'
-clueIsland = clueMap(clueList, islandMap)
+# clueIsland = clueMap(clueList, islandMap)
 '''print(jewelList)
 print(clueList)
 print(terrainList)

@@ -50,7 +50,8 @@ def controls():
           + "             a s d\n"
           + "Press h for help\n"
           + "Press q to quit\n"
-          + "Press x to display map")
+          + "Press x to display map\n"
+          + "Press p to shop\n")
 
 
 def main():    
@@ -58,8 +59,12 @@ def main():
 
     """ Testing Player class creation"""
     p = Player.Player()
-    dictList = [{"e":"event"}, {"c":"clue"}, {"g":"grass"}]
+    dictList = [{"e":"event"}, {"c":"clue"}, {"h":"Hammer"}, {"s":"Shovel"}, {"b":"Boat"}]
     p.initKeys(dictList)
+    p.money = 100
+    p.add_item('h', 5, False)
+    p.add_item('s', 5, False)
+    p.add_item('b', 5, False)
 
     """ Testing clues """
     reference_map = [['e'] * MAP_SIZE for i in range(MAP_SIZE)]
@@ -67,9 +72,8 @@ def main():
     reference_map[4][3] = 'j'
 
     jewelList, clueList, terrainList, jewelString, terrainString = clueMaker.generateClues(reference_map, 0, 5)
-    clues = []
     for x in range(0, len(clueList)):
-        clues.append([clueList[x], jewelString[x], terrainString[x]])
+        p.clues.append([clueList[x], jewelString[x], terrainString[x]])
     reference_map = clueMaker.clueMap(clueList, reference_map)
 
 
@@ -92,6 +96,8 @@ def main():
             testDisplay(p.location, reference_map)
         elif choice == 'h':
             controls()
+        elif choice == 'p':
+            p.shop()
 
         #########################################
         #           Update Status of Hero       #
@@ -102,7 +108,7 @@ def main():
         elif choice == 'w':
             """ Testing Events """
             if p.location[0] > 0:
-                p.move_to([p.location[0] - 1, p.location[1]], reference_map, clues)
+                p.move_to([p.location[0] - 1, p.location[1]], reference_map)
             # if coordinates[0][0] > 0:
             #     # cost = checkObstacle(coordinates[0][0]-1, reference_map)
             #     cost = 0
@@ -120,7 +126,7 @@ def main():
         elif choice == 's':
             """ Testing Events """
             if p.location[0] < MAP_SIZE - 1:
-                p.move_to([p.location[0] + 1, p.location[1]], reference_map, clues)
+                p.move_to([p.location[0] + 1, p.location[1]], reference_map)
             # if coordinates[0][0] < MAP_SIZE - 1:
             #     # cost = checkObstacle(coordinates[0][0] + 1, reference_map)
             #     cost = 0
@@ -139,7 +145,7 @@ def main():
         elif choice == 'a':
             """ Testing Events """
             if p.location[1] > 0:
-                p.move_to([p.location[0], p.location[1] - 1], reference_map, clues)
+                p.move_to([p.location[0], p.location[1] - 1], reference_map)
             # if coordinates[1][0] > 0:
             #     # cost = checkObstacle(coordinates[1][0] - 1, reference_map)
             #     cost = 0
@@ -158,7 +164,7 @@ def main():
         elif choice == 'd':
             """ Testing Events """
             if p.location[1] < MAP_SIZE - 1:
-                p.move_to([p.location[0], p.location[1] + 1], reference_map, clues)
+                p.move_to([p.location[0], p.location[1] + 1], reference_map)
             # if coordinates[1][0] < MAP_SIZE - 1:
             #     # cost = checkObstacle(coordinates[1][0] - 1, reference_map)
             #     cost = 0
