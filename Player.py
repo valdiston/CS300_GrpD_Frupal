@@ -12,6 +12,9 @@ class Player:
         self.money = 0
         self.energy = 0
         self.gems = 0
+        self.energyBarCost = 0
+        self.goldFound = 0
+        self.newTerrain = []
         # default field of view
         self.view = 1
 
@@ -26,7 +29,7 @@ class Player:
         self.keyDict = {}  # format: {"map_char": "item/terrain", }
 
         """ Item/Map Properties  """
-        self.ItemDict = {}  # format: {"key/item": {"energy": x/None, "vision": y/None, "money": z/None, "cost": a},}
+        self.ItemDict = {}  # format: {"key/item": {"cost": x/None, "owned": False},}
 
         self.terrainDict = {}  # format: {"key/terrain": {"energy": x, "item": y/None, "item energy": z/0},}
 
@@ -35,7 +38,7 @@ class Player:
 
     def setup(self):
         # todo fill keyDict, ItemDict, terrainDict, and inventory prior to setting up map
-        self.refMap = mapMaker.mapMaker(self.mapSize, self.terrainDict)
+        self.refMap = mapMaker.mapMaker(self.mapSize, self.newTerrain)
 
     """ Key related functionss"""
 
