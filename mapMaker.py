@@ -243,3 +243,4 @@ def getTitle():
     with open('savedGames.txt', 'r') as f:
         games = [row for row in reader]
             
+

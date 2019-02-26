@@ -23,6 +23,7 @@ coordinates = [[0],[0]]
 
 def display():
     for i in range(0, MAP_SIZE):
+        display()
         for j in range(0, MAP_SIZE):
             if i == coordinates[0][0] and j == coordinates[1][0]:
                 print('웃', end =' ')
