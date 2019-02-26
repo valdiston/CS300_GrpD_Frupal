@@ -38,7 +38,7 @@ class Player:
         # todo fill keyDict, ItemDict, terrainDict, and inventory prior to setting up map
         self.refMap = mapMaker.mapMaker(self.mapSize, self.newTerrain)
 
-    """ Key related functionss"""
+    """ Key related functions"""
 
     # takes in a list of {"map_char": "item/terrain"}
     def initKeys(self, dictList):
