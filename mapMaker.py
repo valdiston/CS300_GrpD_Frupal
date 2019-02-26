@@ -2,7 +2,7 @@
 #representing different terrain and objects for game
 
 #key for every terrain and object possible in map:
-#p = plain
+#'_' = plain
 #w = water
 #f = forest
 #r = rocky
@@ -12,10 +12,12 @@
 #g = gold
 #e = event
 #c = clue      !!!! not sure what the difference between an event and a clue is!!!!
-#b = binoculars 
+#l = binoculars 
 #j = jewels
 
 import random
+import csv
+from Player import *
 
 #mapMaker() takes two args:
     #arg 1 == int representing map size
@@ -64,6 +66,8 @@ def preSeedMap(map, mapSize):
 
     #the larger the map size the more unique 
     # objects should be placed in map
+    adding = 1
+
     if(mapSize >= 30):
         adding = 2
     if(mapSize >= 50):
@@ -111,11 +115,18 @@ def getCoord(map, mapSize):
 #getMapObject() returns:
     #letter representing the kind of object to fill space on map with
 
-def getMapObject():
+def getMapObject(addedTerrain):
     
     random.seed(a=None)
     luckyNumber = random.randrange(0,100)
-
+    if addedTerrain != 0:
+        if luckyNumber < 35:
+           #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+           #find another lucky number depending on how many terrains
+           #were added and return the corresponding char.
+    
+    #if you didn't add from addedTerrain get another lucky number
+    #and return corresponding char
     if(luckyNumber<30):
         return 'p'
     if(luckyNumber<45):
@@ -150,31 +161,34 @@ def intro():
     print ("Even worse, some terrain is tougher to walk through and saps you of even more energy!")
     print ("Luckily you have gold and can buy items like chainsaws and boats to make things easier on you.")
 
-    print ("Would you like an Easy, Medium or Hard game...Or would you like to make your own game?") 
+    print ("Would you like to load a game or Easy, Medium or Hard game...\nOr would you like to make your own game?") 
     pick = False
     while pick == False:
-        print ("[1]Easy\n[2]Medium\n[3]Hard\n[4]Create New Game")
+        print ("[1]Load Game\n[2]Easy\n[3]Medium\n[4]Hard\n[5]Create New Game")
         game = input("Enter Number: ")
         if game.isnumeric():
-            if int(game) >= 1 and int(game) <= 4:
+            if int(game) >= 1 and int(game) <= 5:
                 pick = True
             else:
-                print ("\nJust a number between 1 and 4 please\n") 
+                print ("\nJust a number between 1 and 5 please\n") 
         else:
             print ("\nThose aren't even numbers. How are you going to survive on Frupal??")
-            print ("Just a number between 1 and 4 please\n") 
+            print ("Just a number between 1 and 5 please\n") 
     
     return game
 
 
 def loadGame(game, player):
     if game == 1:
-        load("easy", player)
+        title = getTitle()
+        load(title, player)
     if game == 2:
-        load("medium", player)
+        load("easy", player)
     if game == 3:
-        load("hard", player)
+        load("medium", player)
     if game == 4:
+        load("hard", player)
+    if game == 5:
         #circle back and do an input check
         title = input("what do you want your game to be called: ")
         #edit_csv()
@@ -185,15 +199,47 @@ def loadGame(game, player):
 def load(fileName, player):
     #open up file and set up player and map
 
+    #open game file and read in item and terrain info. store in player object
+    with open(fileName + '.csv') as f:
+        reader = csv.reader(f, delimiter=',')
+
+        gold = next(reader)
+        player.money = gold[1]
+        energy = next(reader)
+        player.energy = energy[1]
+        size = next(reader)
+        player.mapSize = size[1]
+        energyBarCost = next(reader)
+        newTerrain = []
+        newTerrain[0] = 0
+
+        next(reader)
+        
+        for row in reader:
+            #if terrain/item is used in this instance of a game
+            if row[1] == 1:
+                #if row contains a terrain
+                if row[2] == 1:
+                    player.add_to_terrain(row[0], row[3], row[6], row[7])
+                    if (row[0] != 'w' and row[0] != 'p'):
+                        newTerrain[0] += 1
+                        newTerrain.append(row[0])
+                #else row must contain item
+                else:
+                    player.add_to_itemlist(row[0], row[3], row[8], row[4], row[5])
+        #player.addedTerrain == newTerrain
+
+    #build a dictionary with all possible characters and what they represent 
+    with open('keyDict.csv') as f:
+        reader = csv.reader(f, delimiter=',')
+
+        keyDict = {row[0]:row[1] for row in reader}
+        player.initKeys(keyDict)
 
 
 
-"""
-#display function for testing
-mapSize = 30
-hiddenMap = mapMaker(mapSize, "forest")
-for t in range(mapSize):
-    print ()
-    for j in range(mapSize):
-        print (hiddenMap[t][j], end="")
-""" 
+def getTitle():
+
+    with open('savedGames.txt', 'r') as f:
+        games = [row for row in reader]
+            
