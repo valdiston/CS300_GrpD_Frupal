@@ -38,7 +38,12 @@ class Energy(Event):
             number1= random.randint(1,100)
             number2= random.randint(1,100)
             print("What is ", number1," + ", number2 )
-            answer=int(input())
+            answer=input()
+            while answer.isnumeric()== False:
+                print("Please enter a number")
+                print("What is ", number1, " + ", number2)
+                answer = input()
+            answer=int(answer)
             if answer== number1+number2:
                 print("Correct. Your "+type+" is increase by: ", increase_by)
                 current= current+increase_by
@@ -48,7 +53,12 @@ class Energy(Event):
             number1= random.randint(1,100)
             number2= random.randint(1,100)
             print("What is ", number1," - ", number2 )
-            answer=int(input())
+            answer=input()
+            while answer.isnumeric()== False:
+                print("Please enter a number")
+                print("What is ", number1, " + ", number2)
+                answer = input()
+            answer= int(answer)
             if answer== number1-number2:
                 print("Correct. Your "+type+" is increase by: ", increase_by)
                 current = current + increase_by
@@ -58,7 +68,12 @@ class Energy(Event):
             number1= random.randint(1,100)
             number2= random.randint(1,100)
             print("What is ", number1," * ", number2 )
-            answer=int(input())
+            answer=input()
+            while answer.isnumeric()== False:
+                print("Please enter a number")
+                print("What is ", number1, " + ", number2)
+                answer = int(input())
+            answer=int(answer)
             if answer== number1*number2:
                 print("Correct. Your "+type+" is increase by: ", increase_by)
                 current = current + increase_by
@@ -66,7 +81,7 @@ class Energy(Event):
                 print("Incorrect, you miss your chance")
         return current
 
-    def trigger_trivia(self, current,increase_by):
+    def trigger_trivia(self, current,increase_by,type):
         rng = random.randint(1, 10)
         if rng==1:
             print("In C++, what symbol you must put at the end of a statement ?")
@@ -94,7 +109,11 @@ class Energy(Event):
                 print("Incorrect. You miss your chance")
         if rng == 4:
             print("In Counter Strike: Global Offensive, how much does the SG 553 cost ?")
-            answer = int(input())
+            answer = input()
+            while answer.isnumeric()== False:
+                print("Please enter a number")
+                answer = input()
+            answer=int(answer)
             if answer == 2750:
                 print("Correct. Your "+type+" is increase by: ", increase_by)
                 current = current + increase_by

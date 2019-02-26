@@ -188,12 +188,11 @@ def load(fileName, player):
 
 
 
-"""
+
 #display function for testing
-mapSize = 30
-hiddenMap = mapMaker(mapSize, "forest")
-for t in range(mapSize):
-    print ()
-    for j in range(mapSize):
-        print (hiddenMap[t][j], end="")
-""" 
+    mapSize = 30
+    hiddenMap = mapMaker(mapSize, "forest")
+    for t in range(mapSize):
+        print ()
+        for j in range(mapSize):
+            print (hiddenMap[t][j], end="")

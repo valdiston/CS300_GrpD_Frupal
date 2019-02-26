@@ -206,11 +206,11 @@ class Player:
                 eventType = random.randint(1, 2)
                 if eventType == 1:  # 1 signifies energy event
                     newEnrg = random.randint(5, 15)
-                    self.energy = event.trigger(self.energy, newEnrg)
+                    self.energy = event.trigger(self.energy, newEnrg,"energy")
                     return 1
                 elif eventType == 2:  # 2 signifies money event
                     newMoney = random.randint(5, 15)
-                    self.money = event.trigger(self.money, newMoney)
+                    self.money = event.trigger(self.money, newMoney,"money")
                     return 1
                 else:
                     return 0
