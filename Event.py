@@ -284,10 +284,15 @@ class Energy(Event):
         print("1-Easy. Half the reward")
         print("2-Medium. No modification to the reward")
         print("3-Hard. Double the reward")
-        choice = int(input())
-        while choice <1 or choice >3 :
-            print("Invalid choice!!")
-            choice= int(input())
+        print("If you enter a number smaller than 1 or larger than 3, you will lose this event immediately!!")
+        choice = input()
+        while choice.isnumeric()== False:
+            print("Please enter a number")
+            choice=input()
+        choice= int(choice)
+        if choice <1 or choice >3 :
+            print("Haha, just kidding. You are a dare devil. Your reward is:",increase_by,""+type)
+            current=current+increase_by
         if choice == 1:
             print("You chose Easy difficult")
             rng = random.randint(1,2)
@@ -328,7 +333,7 @@ def main():
     Energy1 = Energy("Event")
     current =50
     increase_by =15
-    current=Energy1.trigger(current, increase_by,"health")
+    current=Energy1.trigger_number(current, increase_by,"health")
     print("Your current energy is: ",current)
     if current == 0:
         print("You're dead")
