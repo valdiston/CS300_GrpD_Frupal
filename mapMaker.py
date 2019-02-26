@@ -1,19 +1,19 @@
-# function to randomly fill a 2-D array with values
-# representing different terrain and objects for game
+#function to randomly fill a 2-D array with values
+#representing different terrain and objects for game
 
-# key for every terrain and object possible in map:
-# '_' = plain
-# w = water
-# f = forest
-# r = rocky
-# b = boat(for traversing water)
-# c = chainsaw(for traversing forest) / should probably be c for Clue. Change to h for hatchet?
-# p = pickaxe(for traversing rocky ground)
-# g = gold
-# e = event  event to gain either gold or energy
-# c = clue   clue to nearest gem
-# l = binoculars
-# j = jewels
+#key for every terrain and object possible in map:
+#p = plain
+#w = water
+#f = forest
+#r = rocky
+#b = boat(for traversing water)
+#c = chainsaw(for traversing forest)
+#j = pickaxe(for traversing rocky ground)
+#g = gold
+#e = event
+#c = clue      !!!! not sure what the difference between an event and a clue is!!!!
+#l = binoculars 
+#z = jewels
 
 import random
 import csv
