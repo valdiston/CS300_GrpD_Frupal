@@ -2,18 +2,18 @@
 #representing different terrain and objects for game
 
 #key for every terrain and object possible in map:
-#'_' = plain
+#p = plain
 #w = water
 #f = forest
 #r = rocky
 #b = boat(for traversing water)
 #c = chainsaw(for traversing forest)
-#p = pickaxe(for traversing rocky ground)
+#j = pickaxe(for traversing rocky ground)
 #g = gold
 #e = event
 #c = clue      !!!! not sure what the difference between an event and a clue is!!!!
 #l = binoculars 
-#j = jewels
+#z = jewels
 
 import random
 import csv
