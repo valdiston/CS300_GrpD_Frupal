@@ -3,6 +3,7 @@ import clueMaker
 import Event
 import config
 import random
+import csv
 
 
 class Player:
@@ -36,17 +37,15 @@ class Player:
 
     def setup(self):
         # todo fill keyDict, ItemDict, terrainDict, and inventory prior to setting up map
-        self.refMap = mapMaker.mapMaker(self.mapSize, self.newTerrain)
+        self.refMap = mapMaker.mapMaker(self.mapSize, self)
 
     """ Key related functions"""
 
     # takes in a list of {"map_char": "item/terrain"}
-    def initKeys(self, dictList):
-        if dictList is not None:
-            for dict in dictList:
-                self.keyDict.update(dict)
-        else:
-            return -1
+    def initKeys(self):
+        with open('keyDict.csv') as f:
+            reader = csv.reader(f, delimiter=',')
+            self.keyDict.update({row[0]: row[1] for row in reader})
 
     # returns the corresponding key string related to the reference map character
     def getKey(self, character):
@@ -59,6 +58,12 @@ class Player:
     """ Terrain Functions"""
 
     # returns = 1: if item is success, -1: if terrain is None
+
+    #parameters:
+    #terrain == char representing terraintype
+    #energy == energy cost of traversing terrain
+    #item == terrain's associated tool (ie. terrain/water, item/boat)
+    # item_energy == energy cost of traversing terrain with item
     def add_terrain(self, terrain, energy, item, item_energy):
         if terrain is not None:
             terrainDict = {terrain: {"energy": energy, "item": item, "item energy": item_energy}}
