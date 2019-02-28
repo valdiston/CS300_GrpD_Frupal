@@ -16,6 +16,7 @@
 #j = jewels
 
 import random
+import csv
 
 #mapMaker() takes two args:
     #arg 1 == int representing map size
@@ -141,6 +142,22 @@ def openSpace(map, row, col):
     else:  
         free = False
     return free
+
+
+#csv
+def loadGame(fileName, player, map):
+
+    with open(fileName + '.csv') as f:
+        readCSV = csv.reader(f, delimiter=',')
+        mapSize = next(readCSV)
+        print ("mapSize")
+        print (mapSize)
+        energy = next(readCSV)
+        gold = next(readCSV)
+        binoculars = next(readCSV)
+        chainsaw = next(readCSV)
+        jackHammer = next(readCSV)
+        sickle = next(readCSV)
 
 """
 #display function for testing
