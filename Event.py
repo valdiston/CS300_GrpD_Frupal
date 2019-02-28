@@ -77,8 +77,8 @@ class Energy(Event):
             answer = input()
             while not answer.isnumeric():
                 print("Please enter a number")
-                print("What is ", number1, " + ", number2)
-                answer = int(input())
+                print("What is ", number1, " * ", number2)
+                answer = input()
             answer = int(answer)
             if answer == number1 * number2:
                 print("Correct. Your " + type + " is increase by: ", increase_by)
@@ -338,7 +338,7 @@ def test():
     energy1 = Energy("Event")
     current = 50
     increase_by = 15
-    current = energy1.trigger_number(current, increase_by, "health")
+    current = energy1.trigger_math(current, increase_by, "health")
     print("Your current energy is: ", current)
     if current == 0:
         print("You're dead")
