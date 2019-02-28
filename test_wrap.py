@@ -57,8 +57,6 @@ class Player:
 
 """ Map Configurations """
 MAP_SIZE = 20
-
-#dummy list of user added terrain
 extraTerrain = ["forest", "rocks"]
 reference_map = mapMaker(MAP_SIZE, extraTerrain)
         
@@ -117,6 +115,14 @@ def checkObstacle(coordniates, reference): #skeleton of a function to check ener
 
 def main():    
     print("""Welcome to the Game!""")
+
+    #we'll need a menu for the user to choose preloaded games ie. easy, med, saved games...
+    #I'll use that to open up the correct file.
+    fileName = "config" 
+    testPlayer = Player()
+    blankMap  = [ [0]* MAP_SIZE for i in range(MAP_SIZE) ]
+    print ("about to load game")
+    loadGame(fileName, testPlayer, blankMap)
 
     p = Player()
     print("inventory = ", p.inventory)
