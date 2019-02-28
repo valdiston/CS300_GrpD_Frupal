@@ -58,7 +58,7 @@ def preSeedMap(map, mapSize, player):
     objectsPlaced = 0
 
     # place the number of gems the player needs to find
-    for i in range(player.gems):
+    for i in range(player.totalGems):
         coord = getCoord(map, mapSize)
         row = coord[0]
         col = coord[1]
@@ -269,7 +269,7 @@ def load(fileName, player):
         goldFound = next(reader)
         player.goldFound = int(goldFound[1])
         gems = next(reader)
-        player.gems = int(gems[1])
+        player.totalGems = int(gems[1])
 
         newTerrain = []
         newTerrain.append(0)

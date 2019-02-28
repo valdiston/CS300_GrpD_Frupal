@@ -1,7 +1,7 @@
 from mapMaker import *
 import Player
-import clueMaker
 import os
+from time import sleep
 
 """ Map Configurations """
 # MAP_SIZE = 5
@@ -26,25 +26,26 @@ import os
 # island_map = [[0] * MAP_SIZE for i in range(MAP_SIZE)]
 
 """ Status of Hero """
-coordinates = [[0], [0]]
+# coordinates = [[0], [0]]
 
 
-def display():
-    for i in range(0, MAP_SIZE):
-        display()
-        for j in range(0, MAP_SIZE):
-            if i == coordinates[0][0] and j == coordinates[1][0]:
-                print('웃', end=' ')
-            elif abs(i - coordinates[0][0]) < 2 and abs(j - coordinates[1][0]) < 2:
-                                print(str(reference_map[i][j]), end=' ')
-            else:
-                print(str(' '), end=' ')
-        print("")
+# def display():
+#     for i in range(0, MAP_SIZE):
+#         display()
+#         for j in range(0, MAP_SIZE):
+#             if i == coordinates[0][0] and j == coordinates[1][0]:
+#                 print('웃', end=' ')
+#             elif abs(i - coordinates[0][0]) < 2 and abs(j - coordinates[1][0]) < 2:
+#                                 print(str(reference_map[i][j]), end=' ')
+#             else:
+#                 print(str(' '), end=' ')
+#         print("")
 
 
 def testDisplay(player):
     os.system('cls' if os.name == 'nt' else 'clear')
-    print("Current Money: %-5s Current Energy: %-5s Gems: %s" % (player.money, player.energy, abs(-5 + player.gems)))
+    print("Current Money: %-5s Current Energy: %-5s Gems: %d/%d" % (player.money, player.energy, int(player.gems),
+                                                                    int(player.totalGems)))
     for i in range(0, player.mapSize):
         for j in range(0, player.mapSize):
             if i == player.location[0] and j == player.location[1]:
@@ -57,6 +58,13 @@ def testDisplay(player):
                 print(str(player.dispMap[i][j]), end=' ')
         print("")
 
+def cheat(player):
+    # player.dispMap = player.refMap
+    os.system('cls' if os.name == 'nt' else 'clear')
+    while len(player.gemList) > 0:
+        testDisplay(player)
+        player.move_to(player.gemList[0], player.refMap)
+        sleep(2)
 
 def controls():
     print("Please enter   w   to walk\n"
@@ -64,7 +72,8 @@ def controls():
           + "Press h for help\n"
           + "Press q to quit\n"
           + "Press x to display map\n"
-          + "Press p to shop\n")
+          + "Press p to shop\n"
+          + "Press l to display the legend\n")
 
 
 def main():    
@@ -78,56 +87,17 @@ def main():
     # print ("about to load game")
     # loadGame(fileName, testPlayer, blankMap)
     #
-    # p = Player()
-    # print("inventory = ", p.inventory)
-    # ret = p.add_to_inventory("chainsaw")
-    # print("return = ", ret, "inventory = ", p.inventory)
-    # ret = p.add_item("chainsaw")
-    # print("return = ", ret, "inventory = ", p.inventory)
-    # ret = p.add_item("chainsaw")
-    # print("return = ", ret, "inventory = ", p.inventory)
-    # ret = p.use_item("chainsaw")
-    # print("return = ", ret, "inventory = ", p.inventory)
-    # ret = p.use_item("chainsaw")
-    # print("return = ", ret, "inventory = ", p.inventory)
-    # ret = p.use_item("chainsaw")
-    # print("return = ", ret, "inventory = ", p.inventory)
-    #
-    # exit()
+
 
     testPlayer = Player.Player()
     game = intro()
     loadGame(game, testPlayer)
-    
-    """ Testing Player class creation"""
-    # p = Player.Player()
-    # dictList = [{"e": "event"}, {"c": "clue"}, {"h": "Hammer"}, {"s": "Shovel"}, {"b": "Boat"}]
-    # p.initKeys(dictList)
-    # p.money = 100
-    # p.add_item('h', 5, False)
-    # p.add_item('s', 5, False)
-    # p.add_item('b', 5, False)
-
-    """ Testing clues """
-    # reference_map = [['e'] * MAP_SIZE for i in range(MAP_SIZE)]
-    # reference_map[2][4] = 'j'
-    # reference_map[4][3] = 'j'
-
-    jewelList, clueList, terrainList, jewelString, terrainString = clueMaker.generateClues(testPlayer.refMap, 0, testPlayer.mapSize)
-    for x in range(0, len(clueList)):
-        testPlayer.clues.append([clueList[x], jewelString[x], terrainString[x]])
-    testPlayer.refMap = clueMaker.clueMap(clueList, testPlayer.refMap)
-
-    """placeholder variables"""
-    energy = 10
-    money = 10
 
     controls()
-    # display()
     testDisplay(testPlayer)
 
-    while True:
-        choice = input("")
+    while testPlayer.gems < testPlayer.totalGems and testPlayer.energy > 0 and testPlayer.money > 0:
+        choice = input("> ")
 
         if choice == 'q':
             break
@@ -138,6 +108,10 @@ def main():
             controls()
         elif choice == 'p':
             testPlayer.shop()
+        elif choice == 'l':
+            testPlayer.legend()
+        elif choice == "i am a dirty cheater":
+            cheat(testPlayer)
 
         #########################################
         #           Update Status of Hero       #
@@ -146,92 +120,39 @@ def main():
 
         # Walking North
         elif choice == 'w':
-            """ Testing Player Move """
             if testPlayer.location[0] > 0:
                 testPlayer.move_to([testPlayer.location[0] - 1, testPlayer.location[1]], testPlayer.refMap)
-            """ End Test """
-
-            # if coordinates[0][0] > 0:
-            #     # cost = checkObstacle(coordinates[0][0]-1, reference_map)
-            #     cost = 0
-            #     if cost < energy:
-            #         energy -= cost
-            #         print("This move cost you " + str(cost) + " energy. You have " + str(energy) + " energy left")
-            #         coordinates[0][0] = coordinates[0][0] - 1
-            #     else:
-            #         print("You don't have enough energy to mover here")
-            # else:
-            #     energy -= 1
-            #     print("You have stepped on uncrossable water! You lost 1 energy as you were swept back ashore")
                 
         # Walking South
         elif choice == 's':
-            """ Testing Player Move """
             if testPlayer.location[0] < testPlayer.mapSize - 1:
                 testPlayer.move_to([testPlayer.location[0] + 1, testPlayer.location[1]], testPlayer.refMap)
-            """ End Test """
-
-            # if coordinates[0][0] < MAP_SIZE - 1:
-            #     # cost = checkObstacle(coordinates[0][0] + 1, reference_map)
-            #     cost = 0
-            #     if cost < energy:
-            #         energy -= cost
-            #         print("This move cost you " + str(cost) + " energy. You have " + str(energy) + " energy left")
-            #         coordinates[0][0] = coordinates[0][0] + 1
-            #     else:
-            #         print("You don't have enough energy to mover here")
-            # #Coordinates exceed map
-            # else:
-            #     energy -= 1
-            #     print("You have stepped on uncrossable water! You lost 1 energy as you were swept back ashore")
                 
         # Walking East
         elif choice == 'a':
-            """ Testing Player Move """
+
             if testPlayer.location[1] > 0:
                 testPlayer.move_to([testPlayer.location[0], testPlayer.location[1] - 1], testPlayer.refMap)
-            """ End Test """
 
-            # if coordinates[1][0] > 0:
-            #     # cost = checkObstacle(coordinates[1][0] - 1, reference_map)
-            #     cost = 0
-            #     if cost < energy:
-            #         energy -= cost
-            #         print("This move cost you " + str(cost)+ " energy. You have " + str(energy) + " energy left")
-            #         coordinates[1][0] = coordinates[1][0] - 1
-            #     else:
-            #         print("You don't have enough energy to mover here")
-            #
-            # else:
-            #     energy -= 1
-            #     print("You have stepped on uncrossable water! You lost 1 energy as you were swept back ashore")
-                
         # Walking West
         elif choice == 'd':
-            """ Testing Player Move """
             if testPlayer.location[1] < testPlayer.mapSize - 1:
                 testPlayer.move_to([testPlayer.location[0], testPlayer.location[1] + 1], testPlayer.refMap)
-            """ End Test """
-
-            # if coordinates[1][0] < MAP_SIZE - 1:
-            #     # cost = checkObstacle(coordinates[1][0] - 1, reference_map)
-            #     cost = 0
-            #     if cost < energy:
-            #         energy -= cost
-            #         print("This move cost you " + str(cost) + " energy. You have " + str(energy) + " energy left")
-            #         coordinates[1][0] = coordinates[1][0] + 1
-            #     else:
-            #         print("You don't have enough energy to mover here")
-            #
-            # else:
-            #     energy -= 1
-            #     print("You have stepped on uncrossable water! You lost 1 energy as you were swept back ashore")
 
         else:
             print("Try a valid command""")
-            
-        # display()
+
         testDisplay(testPlayer)
+    # end while loop
+    if testPlayer.gems == testPlayer.totalGems:
+        print("\nCongratulations, You have collected all of the Gems on the Island and completed the game !!!")
+    elif testPlayer.energy == 0 and testPlayer.money == 0:
+        print("\nOh No, you have run out of Money and Energy. With no alternatives left you slowly parish and die!",
+              "\nYou Lose!",
+              "\nIf you absolutely need to - enter 'i am a dirty cheater' at the movement prompt to automatically "
+              "win the game.")
+    else:
+        print("\nThanks for playing. Sorry you were not able to complete the game before quiting.")
 
 
 if __name__ == '__main__':

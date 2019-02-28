@@ -2,6 +2,7 @@ import mapMaker
 import Event
 import random
 import csv
+import clueMaker
 
 
 class Player:
@@ -11,6 +12,7 @@ class Player:
         self.money = 0
         self.energy = 0
         self.gems = 0
+        self.totalGems = 0
         self.energyBarCost = 0
         self.goldFound = 0
         self.newTerrain = []
@@ -18,6 +20,9 @@ class Player:
         self.view = 2
         # list of clues
         self.clues = []
+        # list of gem locations
+        self.gemList = []
+
         """ Map Variables """
         self.mapSize = 0
         self.refMap = None
@@ -34,13 +39,20 @@ class Player:
 
         self.terrainDict = {}  # format: {"key/terrain": {"energy": x, "item": y/None, "item energy": z/0},}
 
+    """ Setup Functions"""
     def setup(self):
-        # todo fill keyDict, ItemDict, terrainDict, and inventory prior to setting up map
         self.refMap = mapMaker.mapMaker(self.mapSize, self)
         self.dispMap = [[' '] * self.mapSize for i in range(self.mapSize)]
+        self.generateClues()
+
+    def generateClues(self):
+        self.gemList, clueList, terrainList, jewelString, terrainString = clueMaker.generateClues(self.refMap, 0,
+                                                                                                  self.mapSize)
+        for x in range(0, len(clueList)):
+            self.clues.append([clueList[x], jewelString[x], terrainString[x]])
+        self.refMap = clueMaker.clueMap(clueList, self.refMap)
 
     """ Key related functions"""
-
     # takes in a list of {"map_char": "item/terrain"}
     def initKeys(self):
         with open('keyDict.csv') as f:
@@ -56,13 +68,12 @@ class Player:
             return -1
 
     """ Terrain Functions"""
-
     # returns = 1: if item is success, -1: if terrain is None
 
-    #parameters:
-    #terrain == char representing terraintype
-    #energy == energy cost of traversing terrain
-    #item == terrain's associated tool (ie. terrain/water, item/boat)
+    # parameters:
+    # terrain == char representing terraintype
+    # energy == energy cost of traversing terrain
+    # item == terrain's associated tool (ie. terrain/water, item/boat)
     # item_energy == energy cost of traversing terrain with item
     def add_terrain(self, terrain, energy, item, item_energy):
         if terrain is not None:
@@ -73,7 +84,6 @@ class Player:
             return -1
 
     """ Item Functions"""
-
     # returns = 1: if item is success, 0: if the user has 0 of that item, 1: if the item was used
     def add_item(self, item, cost, owned):
         if item is not None:
@@ -157,26 +167,49 @@ class Player:
             else:
                 print(" Whoops! You already own this item. At the moment you cannot buy another.\n")
 
+    """ Legend Function """
+    def legend(self):
+        print(" [xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx]")
+        print(" [x]                               Game Legend                                 [x]")
+        print(" [xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx]")
+        print(" %-20s | Information:                                           [x]" % "[x] Special:")
+        print(" [xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx]")
+        print(" [x] %-16s | Collect all of them to win the game!                   [x]" % "* = Gem")
+        print(" [x] %-16s | A Clue that directs you to a gems location             [x]" % "c = Clue")
+        print(" [x] %-16s | Gives money or energy if completed  successfully       [x]" % "e = Event")
+        print(" [x] %-16s | Provides %d gold when stepped on                       [x]" % ("$ = Sack of gold",
+                                                                                           self.goldFound))
+        print(" [xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx]")
+        print(" %-20s | Energy Cost: | Shop Item: |  Energy Cost w/ Item: |    [x]" % "[x] Terrain:")
+        print(" [xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx]")
+        for terrain in self.terrainDict.keys():
+            if self.terrainDict[terrain]["item"] != '0':
+                print(" [x] %s = %-12s |       %-6d |    %-7s |            %-10s |    [x]"
+                      % (terrain, self.getKey(terrain), int(self.terrainDict[terrain]["energy"]),
+                         self.getKey(self.terrainDict[terrain]["item"]), self.terrainDict[terrain]["item energy"]))
+            else:
+                print(" [x] %s = %-12s |       %-6d |    None    |           N/A         |    [x]" % (terrain,
+                      self.getKey(terrain),int(self.terrainDict[terrain]["energy"])))
+        print(" [xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx]\n")
+
     """ Movement Functions """
 
     def move_to(self, coords, referenceMap):
-        # key = self.getKey(referenceMap[coords[0]][coords[1]])
         key = referenceMap[coords[0]][coords[1]]
-        # if key not in self.terrainDict:
-        #     if key not in ['e', 'j', '$', 'c', ' ']:
-        #         print("Map contains an unknown character")
-        #         return -1
         if key not in list(self.terrainDict.keys()) + ['e', '*', '$', 'c', ' ']:
             print("Map contains an unknown character")
             return -1
         else:
             # if the location contains a gem
             if key == "*":
-                self.gems -= 1
+                self.gems += 1
                 self.location = coords
                 referenceMap[coords[0]][coords[1]] = 'p'
+                for index, location in enumerate(self.gemList):
+                    if location == [coords[0], coords[1]]:
+                        self.gemList.remove(location)
                 print("Wow! You managed to find one of the hidden island gems!!!")
-                print("Collected Gems: %d/5" % self.gems)
+                print("Collected Gems: %d/%d" % (self.gems, self.totalGems))
                 return 1
 
             if key == "$":
