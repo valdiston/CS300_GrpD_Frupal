@@ -13,7 +13,7 @@
 #e = event
 #c = clue      !!!! not sure what the difference between an event and a clue is!!!!
 #l = binoculars 
-#z = jewels
+#* = jewels
 
 import random
 import csv
@@ -62,7 +62,7 @@ def preSeedMap(map, mapSize, player):
         coord = getCoord(map, mapSize)
         row = coord[0]
         col = coord[1]
-        map[row][col] = 'z'
+        map[row][col] = '*'
         objectsPlaced += 1
     return objectsPlaced
 """
@@ -135,16 +135,26 @@ def getMapObject(player):
     # if you didn't add from addedTerrain get another lucky number
     # and return corresponding char
     luckyNumber = random.randrange(0, 100)
+    # if luckyNumber < 30:
+    #     return 'p'
+    # if luckyNumber < 45:
+    #     return 'w'
+    # if luckyNumber < 60:
+    #     return '$'
+    # if luckyNumber < 80:
+    #     return 'c'
+    # if luckyNumber < 100:
+    #     return 'e'
     if luckyNumber < 30:
-        return 'p'
-    if luckyNumber < 45:
-        return 'w'
-    if luckyNumber < 60:
-        return 'g'
-    if luckyNumber < 80:
-        return 'c'
-    if luckyNumber < 100:
         return 'e'
+    # if luckyNumber < 45:
+    #     return 'c'
+    if luckyNumber < 60:
+        return 'w'
+    if luckyNumber < 80:
+        return '$'
+    if luckyNumber < 100:
+        return 'p'
 
 
 # openSpace() takes three args:
@@ -243,7 +253,7 @@ def loadGame(game, player):
 
 def load(fileName, player):
     # open up file and set up player and map
-    print ("attempting to load game")
+    print("attempting to load game")
     # open game file and read in item and terrain info. store in player object
     with open(fileName + '.csv') as f:
         reader = csv.reader(f, delimiter=',')
@@ -267,14 +277,14 @@ def load(fileName, player):
 
         for row in reader:
                 if int(row[1]) == 1:
-                    player.add_terrain(row[0], row[2], row[3], row[5])
+                    player.add_terrain(row[0].strip(), row[2].strip(), row[3].strip(), row[5].strip())
                     #if not standard terrain make list of addedTerrain for building map
                     if row[0] != 'w' and row[0] != 'p':
                         newTerrain[0] += 1
-                        newTerrain.append(row[0])
+                        newTerrain.append(row[0].strip())
                 # else row must contain item
                 else:
-                    player.add_item(row[0], row[4], False)
+                    player.add_item(row[0].strip(), row[4].strip(), False)
     player.newTerrain = newTerrain
     player.initKeys()
     player.setup()

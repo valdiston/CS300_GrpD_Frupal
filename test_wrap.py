@@ -1,21 +1,21 @@
 from mapMaker import *
 import Player
 import clueMaker
+import os
 
 """ Map Configurations """
-MAP_SIZE = 5
+# MAP_SIZE = 5
 
 # dummy list of user added terrain
 # extraTerrain = ["forest", "rocks"]
 # reference_map = mapMaker(MAP_SIZE, extraTerrain)
 
 """ Map Configurations """
-"""
-MAP_SIZE = 20
-extraTerrain = ["forest", "rocks"]
-reference_map = mapMaker(MAP_SIZE, extraTerrain)
-        
-island_map  = [ [0]* MAP_SIZE for i in range(MAP_SIZE) ]
+# MAP_SIZE = 20
+# extraTerrain = ["forest", "rocks"]
+# reference_map = mapMaker(MAP_SIZE, extraTerrain)
+#
+# island_map  = [ [0]* MAP_SIZE for i in range(MAP_SIZE) ]
 
 """ Manual Test Map """
 # reference_map = [['e'] * MAP_SIZE for i in range(MAP_SIZE)]
@@ -23,8 +23,7 @@ island_map  = [ [0]* MAP_SIZE for i in range(MAP_SIZE) ]
 # reference_map[4][3] = 'j'
 # reference_map[0][1] = 'c'
 
-island_map = [[0] * MAP_SIZE for i in range(MAP_SIZE)]
-"""
+# island_map = [[0] * MAP_SIZE for i in range(MAP_SIZE)]
 
 """ Status of Hero """
 coordinates = [[0], [0]]
@@ -43,15 +42,19 @@ def display():
         print("")
 
 
-def testDisplay(coords, reference_map):
-    for i in range(0, MAP_SIZE):
-        for j in range(0, MAP_SIZE):
-            if i == coords[0] and j == coords[1]:
+def testDisplay(player):
+    os.system('cls' if os.name == 'nt' else 'clear')
+    print("Current Money: %-5s Current Energy: %-5s Gems: %s" % (player.money, player.energy, abs(-5 + player.gems)))
+    for i in range(0, player.mapSize):
+        for j in range(0, player.mapSize):
+            if i == player.location[0] and j == player.location[1]:
                 print('웃', end=' ')
-            elif abs(i - coords[0]) < 2 and abs(j - coords[1]) < 2:
-                                print(str(reference_map[i][j]), end=' ')
+                player.dispMap[i][j] = player.refMap[i][j]
+            elif abs(i - player.location[0]) < player.view and abs(j - player.location[1]) < player.view:
+                                player.dispMap[i][j] = player.refMap[i][j]
+                                print(str(player.refMap[i][j]), end=' ')
             else:
-                print(str(' '), end=' ')
+                print(str(player.dispMap[i][j]), end=' ')
         print("")
 
 
@@ -66,55 +69,54 @@ def controls():
 
 def main():    
     print("""Welcome to the Game!""")
-"""
-    #we'll need a menu for the user to choose preloaded games ie. easy, med, saved games...
-    #I'll use that to open up the correct file.
-    fileName = "config" 
-    testPlayer = Player()
-    blankMap  = [ [0]* MAP_SIZE for i in range(MAP_SIZE) ]
-    print ("about to load game")
-    loadGame(fileName, testPlayer, blankMap)
 
-    p = Player()
-    print("inventory = ", p.inventory)
-    ret = p.add_to_inventory("chainsaw")
-    print("return = ", ret, "inventory = ", p.inventory)
-    ret = p.add_item("chainsaw")
-    print("return = ", ret, "inventory = ", p.inventory)
-    ret = p.add_item("chainsaw")
-    print("return = ", ret, "inventory = ", p.inventory)
-    ret = p.use_item("chainsaw")
-    print("return = ", ret, "inventory = ", p.inventory)
-    ret = p.use_item("chainsaw")
-    print("return = ", ret, "inventory = ", p.inventory)
-    ret = p.use_item("chainsaw")
-    print("return = ", ret, "inventory = ", p.inventory)
-
-    exit()
-"""
+    # #we'll need a menu for the user to choose preloaded games ie. easy, med, saved games...
+    # #I'll use that to open up the correct file.
+    # fileName = "config"
+    # testPlayer = Player()
+    # blankMap  = [ [0]* MAP_SIZE for i in range(MAP_SIZE) ]
+    # print ("about to load game")
+    # loadGame(fileName, testPlayer, blankMap)
+    #
+    # p = Player()
+    # print("inventory = ", p.inventory)
+    # ret = p.add_to_inventory("chainsaw")
+    # print("return = ", ret, "inventory = ", p.inventory)
+    # ret = p.add_item("chainsaw")
+    # print("return = ", ret, "inventory = ", p.inventory)
+    # ret = p.add_item("chainsaw")
+    # print("return = ", ret, "inventory = ", p.inventory)
+    # ret = p.use_item("chainsaw")
+    # print("return = ", ret, "inventory = ", p.inventory)
+    # ret = p.use_item("chainsaw")
+    # print("return = ", ret, "inventory = ", p.inventory)
+    # ret = p.use_item("chainsaw")
+    # print("return = ", ret, "inventory = ", p.inventory)
+    #
+    # exit()
 
     testPlayer = Player.Player()
     game = intro()
     loadGame(game, testPlayer)
     
     """ Testing Player class creation"""
-    p = Player.Player()
-    dictList = [{"e": "event"}, {"c": "clue"}, {"h": "Hammer"}, {"s": "Shovel"}, {"b": "Boat"}]
-    p.initKeys(dictList)
-    p.money = 100
-    p.add_item('h', 5, False)
-    p.add_item('s', 5, False)
-    p.add_item('b', 5, False)
+    # p = Player.Player()
+    # dictList = [{"e": "event"}, {"c": "clue"}, {"h": "Hammer"}, {"s": "Shovel"}, {"b": "Boat"}]
+    # p.initKeys(dictList)
+    # p.money = 100
+    # p.add_item('h', 5, False)
+    # p.add_item('s', 5, False)
+    # p.add_item('b', 5, False)
 
     """ Testing clues """
-    reference_map = [['e'] * MAP_SIZE for i in range(MAP_SIZE)]
-    reference_map[2][4] = 'j'
-    reference_map[4][3] = 'j'
+    # reference_map = [['e'] * MAP_SIZE for i in range(MAP_SIZE)]
+    # reference_map[2][4] = 'j'
+    # reference_map[4][3] = 'j'
 
-    jewelList, clueList, terrainList, jewelString, terrainString = clueMaker.generateClues(reference_map, 0, 5)
+    jewelList, clueList, terrainList, jewelString, terrainString = clueMaker.generateClues(testPlayer.refMap, 0, testPlayer.mapSize)
     for x in range(0, len(clueList)):
-        p.clues.append([clueList[x], jewelString[x], terrainString[x]])
-    reference_map = clueMaker.clueMap(clueList, reference_map)
+        testPlayer.clues.append([clueList[x], jewelString[x], terrainString[x]])
+    testPlayer.refMap = clueMaker.clueMap(clueList, testPlayer.refMap)
 
     """placeholder variables"""
     energy = 10
@@ -122,7 +124,7 @@ def main():
 
     controls()
     # display()
-    testDisplay(p.location, reference_map)
+    testDisplay(testPlayer)
 
     while True:
         choice = input("")
@@ -131,11 +133,11 @@ def main():
             break
         elif choice == 'x':
             # display()
-            testDisplay(p.location, reference_map)
+            testDisplay(testPlayer)
         elif choice == 'h':
             controls()
         elif choice == 'p':
-            p.shop()
+            testPlayer.shop()
 
         #########################################
         #           Update Status of Hero       #
@@ -145,8 +147,8 @@ def main():
         # Walking North
         elif choice == 'w':
             """ Testing Player Move """
-            if p.location[0] > 0:
-                p.move_to([p.location[0] - 1, p.location[1]], reference_map)
+            if testPlayer.location[0] > 0:
+                testPlayer.move_to([testPlayer.location[0] - 1, testPlayer.location[1]], testPlayer.refMap)
             """ End Test """
 
             # if coordinates[0][0] > 0:
@@ -165,8 +167,8 @@ def main():
         # Walking South
         elif choice == 's':
             """ Testing Player Move """
-            if p.location[0] < MAP_SIZE - 1:
-                p.move_to([p.location[0] + 1, p.location[1]], reference_map)
+            if testPlayer.location[0] < testPlayer.mapSize - 1:
+                testPlayer.move_to([testPlayer.location[0] + 1, testPlayer.location[1]], testPlayer.refMap)
             """ End Test """
 
             # if coordinates[0][0] < MAP_SIZE - 1:
@@ -186,8 +188,8 @@ def main():
         # Walking East
         elif choice == 'a':
             """ Testing Player Move """
-            if p.location[1] > 0:
-                p.move_to([p.location[0], p.location[1] - 1], reference_map)
+            if testPlayer.location[1] > 0:
+                testPlayer.move_to([testPlayer.location[0], testPlayer.location[1] - 1], testPlayer.refMap)
             """ End Test """
 
             # if coordinates[1][0] > 0:
@@ -207,8 +209,8 @@ def main():
         # Walking West
         elif choice == 'd':
             """ Testing Player Move """
-            if p.location[1] < MAP_SIZE - 1:
-                p.move_to([p.location[0], p.location[1] + 1], reference_map)
+            if testPlayer.location[1] < testPlayer.mapSize - 1:
+                testPlayer.move_to([testPlayer.location[0], testPlayer.location[1] + 1], testPlayer.refMap)
             """ End Test """
 
             # if coordinates[1][0] < MAP_SIZE - 1:
@@ -229,7 +231,7 @@ def main():
             print("Try a valid command""")
             
         # display()
-        testDisplay(p.location, reference_map)
+        testDisplay(testPlayer)
 
 
 if __name__ == '__main__':

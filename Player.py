@@ -15,12 +15,13 @@ class Player:
         self.goldFound = 0
         self.newTerrain = []
         # default field of view
-        self.view = 1
+        self.view = 2
         # list of clues
         self.clues = []
         """ Map Variables """
         self.mapSize = 0
         self.refMap = None
+        self.dispMap = None
 
         """ Current Location """
         self.location = [0, 0]
@@ -36,6 +37,7 @@ class Player:
     def setup(self):
         # todo fill keyDict, ItemDict, terrainDict, and inventory prior to setting up map
         self.refMap = mapMaker.mapMaker(self.mapSize, self)
+        self.dispMap = [[' '] * self.mapSize for i in range(self.mapSize)]
 
     """ Key related functions"""
 
@@ -43,7 +45,7 @@ class Player:
     def initKeys(self):
         with open('keyDict.csv') as f:
             reader = csv.reader(f, delimiter=',')
-            self.keyDict.update({row[0]: row[1] for row in reader})
+            self.keyDict.update({row[0].strip(): row[1].strip().capitalize() for row in reader})
 
     # returns the corresponding key string related to the reference map character
     def getKey(self, character):
@@ -95,16 +97,16 @@ class Player:
         print(" --------------------------------------------")
         print("|       Items Available for purchase:        |")
         print("|                                            |")
-        print("|       1. Energy Bar || Cost:", self.energyBarCost, "gold        |")
+        print("|       1. Energy Bar || Cost: %-3s Gold      |" % self.energyBarCost)
 
-        if self.view == 1:
-            print("|       2. Binoculars || Cost: 5 gold        |")
+        if self.view == 2:
+            print("|       2. Binoculars || Cost: %-3s Gold      |" % 90)
         else:
             print("|       2. Binoculars || Already Purchased   |")
         i = 3
         for key in self.ItemDict.keys():
             if not self.ItemDict[key]["owned"]:
-                print("|       %d. %-10s %s %d gold        |" % (i, self.getKey(key), "|| Cost:",
+                print("|       %d. %-10s %s %-3s Gold      |" % (i, self.getKey(key), "|| Cost:",
                       self.ItemDict[key]["cost"]))
                 i += 1
             else:
@@ -131,11 +133,11 @@ class Player:
             else:
                 print("Sorry you don't have enough money to purchase this item")
                 return
-        elif answer == 2 and self.view == 1:
-            if self.money >= 5:
-                self.money -= 5
+        elif answer == 2 and self.view == 2:
+            if self.money >= 90:
+                self.money -= 90
                 # placeholder value
-                self.view += 2
+                self.view += 1
                 print()
             else:
                 print("Sorry you don't have enough money to purchase this item")
@@ -144,8 +146,8 @@ class Player:
             x = 3
             keys = list(self.ItemDict.keys())
             if not self.ItemDict[keys[answer - x]]["owned"]:
-                if self.money >= self.ItemDict[keys[answer - x]]["cost"]:
-                    self.money -= self.ItemDict[keys[answer - x]]["cost"]
+                if self.money >= int(self.ItemDict[keys[answer - x]]["cost"]):
+                    self.money -= int(self.ItemDict[keys[answer - x]]["cost"])
                     self.ItemDict[keys[answer - x]]["owned"] = True
                     print()
                     return
@@ -160,63 +162,19 @@ class Player:
     def move_to(self, coords, referenceMap):
         # key = self.getKey(referenceMap[coords[0]][coords[1]])
         key = referenceMap[coords[0]][coords[1]]
-        if key not in (self.terrainDict or ['e', 'j', '$', 'c', ' ']):
+        # if key not in self.terrainDict:
+        #     if key not in ['e', 'j', '$', 'c', ' ']:
+        #         print("Map contains an unknown character")
+        #         return -1
+        if key not in list(self.terrainDict.keys()) + ['e', '*', '$', 'c', ' ']:
             print("Map contains an unknown character")
             return -1
         else:
-            # # Block for stepping on an item
-            # if key in self.ItemDict:
-            #     print("You have come across a ", key, " during your journey")
-            #     if key == "gem":
-            #         self.gems += 1
-            #         self.location = coords
-            #         referenceMap[coords[0]][coords[1]] = 'g'
-            #         return 1
-            #
-            #     elif self.ItemDict[key]["cost"] > 0:
-            #         cost = self.ItemDict[key]["cost"]
-            #         answer = input("This item costs $" + cost + ". Would you like to buy it? (y/n)")
-            #         if str(answer) == 'y':
-            #             if self.money >= cost:
-            #                 self.add_to_inventory(key)
-            #                 self.money -= cost
-            #                 print("You have just bought a ", key, "  and added it to your inventory")
-            #                 self.location = coords
-            #                 referenceMap[coords[0]][coords[1]] = 'g'
-            #                 return 1
-            #             else:
-            #                 print("Sorry! You don't have enough money to purchase this item... Please come back when"
-            #                       " you have more money")
-            #                 self.location = coords
-            #                 return 1
-            #         else:
-            #             self.location = coords
-            #             return 1
-            #
-            #     elif self.ItemDict[key]["cost"] == 0:
-            #         self.energy += self.ItemDict[key]["energy"]
-            #         if self.ItemDict[key]["money"] >= 0:
-            #             self.money += self.ItemDict[key]["money"]
-            #         if self.ItemDict[key]["vision"] >= 0:
-            #             self.view += self.ItemDict[key]["vision"]
-            #             if key == "binoculars":
-            #                 self.add_to_inventory(key)
-            #                 print("You have just found a pair of", key, "  and added it to your inventory")
-            #                 print("Your vision radius has increased to %s" % self.view)
-            #                 self.location = coords
-            #                 referenceMap[coords[0]][coords[1]] = 'g'
-            #                 return 1
-            #         self.add_to_inventory(key)
-            #         print("You have just found a ", key, "  and added it to your inventory")
-            #         self.location = coords
-            #         referenceMap[coords[0]][coords[1]] = 'g'
-            #         return 1
-
             # if the location contains a gem
-            if key == "j":
-                self.gems += 1
+            if key == "*":
+                self.gems -= 1
                 self.location = coords
-                referenceMap[coords[0]][coords[1]] = ' '
+                referenceMap[coords[0]][coords[1]] = 'p'
                 print("Wow! You managed to find one of the hidden island gems!!!")
                 print("Collected Gems: %d/5" % self.gems)
                 return 1
@@ -224,7 +182,7 @@ class Player:
             if key == "$":
                 self.money += self.goldFound
                 self.location = coords
-                referenceMap[coords[0]][coords[1]] = ' '
+                referenceMap[coords[0]][coords[1]] = 'p'
                 return 1
 
             if key == ' ':
@@ -233,10 +191,10 @@ class Player:
 
             # block for stepping on terrain
             elif key in self.terrainDict:
-                energy = self.terrainDict[key]["energy"]
+                energy = int(self.terrainDict[key]["energy"])
                 item = self.terrainDict[key]["item"]
-                itemEngery = self.terrainDict[key]["item energy"]
-                if item is not None:
+                itemEngery = int(self.terrainDict[key]["item energy"])
+                if item != '0':
                     if self.ItemDict[item]["owned"]:
                         if self.energy >= itemEngery:
                             self.energy -= itemEngery
@@ -265,17 +223,17 @@ class Player:
             # block for stepping on an event
             elif key == "e":
                 self.location = coords
-                referenceMap[coords[0]][coords[1]] = ' '
+                referenceMap[coords[0]][coords[1]] = 'p'
                 print("You have encountered an event!")
                 event = Event.Energy("event")
                 eventType = random.randint(1, 2)
                 if eventType == 1:  # 1 signifies energy event
                     newEnrg = random.randint(5, 15)
-                    self.energy += event.trigger(self.energy, newEnrg, "energy")
+                    self.energy = event.trigger(self.energy, newEnrg, "energy")
                     return 1
                 elif eventType == 2:  # 2 signifies money event
                     newMoney = random.randint(5, 15)
-                    self.money += event.trigger(self.money, newMoney, "money")
+                    self.money = event.trigger(self.money, newMoney, "money")
                     return 1
                 else:
                     return 0
@@ -290,7 +248,7 @@ class Player:
                               " is correct")
                         print(clue[2])
                         self.clues.pop(self.clues.index(clue))
-                        referenceMap[coords[0]][coords[1]] = ' '
+                        referenceMap[coords[0]][coords[1]] = 'p'
                         break
                 self.location = coords
                 return 1

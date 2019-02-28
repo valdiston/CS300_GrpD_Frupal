@@ -7,7 +7,7 @@ def findJewels(map):
     jList = []
     for i in range(len(map)):
         for j in range(len(map)):
-            if map[i][j] == 'j':
+            if map[i][j] == '*':
                 jCoord = [i, j]
                 jList += [jCoord]
     return jList
@@ -161,7 +161,7 @@ def fakeJewels(fakeClueAmount, originalMap):
     fakeJewelList = []
     for i in range(0, fakeClueAmount):
         fakeJewelCoord = [random.randint(0, mapSize - 1), random.randint(0, mapSize - 1)]
-        while originalMap[fakeJewelCoord[0]][fakeJewelCoord[1]] == 'j':
+        while originalMap[fakeJewelCoord[0]][fakeJewelCoord[1]] == '*':
             fakeJewelCoord = [random.randint(0, mapSize - 1), random.randint(0, mapSize - 1)]
 
         fakeJewelList += [fakeJewelCoord]
