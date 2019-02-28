@@ -161,6 +161,33 @@ def openSpace(map, row, col):
     return free
 
 
+"""
+#csv
+def loadGame(fileName, player, map):
+
+    with open(fileName + '.csv') as f:
+        readCSV = csv.reader(f, delimiter=',')
+        mapSize = next(readCSV)
+        print ("mapSize")
+        print (mapSize)
+        energy = next(readCSV)
+        gold = next(readCSV)
+        binoculars = next(readCSV)
+        chainsaw = next(readCSV)
+        jackHammer = next(readCSV)
+        sickle = next(readCSV)
+"""
+
+"""
+#display function for testing
+mapSize = 30
+hiddenMap = mapMaker(mapSize, "forest")
+for t in range(mapSize):
+    print ()
+    for j in range(mapSize):
+        print (hiddenMap[t][j], end="")
+""" 
+
 def intro():
     print("\nWelcome to the Island of Frupal\n")
     print("Somewhere on Frupal there are jewels and it is your job to find them!")

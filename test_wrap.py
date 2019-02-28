@@ -9,6 +9,14 @@ MAP_SIZE = 5
 # extraTerrain = ["forest", "rocks"]
 # reference_map = mapMaker(MAP_SIZE, extraTerrain)
 
+""" Map Configurations """
+"""
+MAP_SIZE = 20
+extraTerrain = ["forest", "rocks"]
+reference_map = mapMaker(MAP_SIZE, extraTerrain)
+        
+island_map  = [ [0]* MAP_SIZE for i in range(MAP_SIZE) ]
+
 """ Manual Test Map """
 # reference_map = [['e'] * MAP_SIZE for i in range(MAP_SIZE)]
 # reference_map[4][4] = 'j'
@@ -16,6 +24,7 @@ MAP_SIZE = 5
 # reference_map[0][1] = 'c'
 
 island_map = [[0] * MAP_SIZE for i in range(MAP_SIZE)]
+"""
 
 """ Status of Hero """
 coordinates = [[0], [0]]
@@ -57,6 +66,32 @@ def controls():
 
 def main():    
     print("""Welcome to the Game!""")
+"""
+    #we'll need a menu for the user to choose preloaded games ie. easy, med, saved games...
+    #I'll use that to open up the correct file.
+    fileName = "config" 
+    testPlayer = Player()
+    blankMap  = [ [0]* MAP_SIZE for i in range(MAP_SIZE) ]
+    print ("about to load game")
+    loadGame(fileName, testPlayer, blankMap)
+
+    p = Player()
+    print("inventory = ", p.inventory)
+    ret = p.add_to_inventory("chainsaw")
+    print("return = ", ret, "inventory = ", p.inventory)
+    ret = p.add_item("chainsaw")
+    print("return = ", ret, "inventory = ", p.inventory)
+    ret = p.add_item("chainsaw")
+    print("return = ", ret, "inventory = ", p.inventory)
+    ret = p.use_item("chainsaw")
+    print("return = ", ret, "inventory = ", p.inventory)
+    ret = p.use_item("chainsaw")
+    print("return = ", ret, "inventory = ", p.inventory)
+    ret = p.use_item("chainsaw")
+    print("return = ", ret, "inventory = ", p.inventory)
+
+    exit()
+"""
 
     testPlayer = Player.Player()
     game = intro()

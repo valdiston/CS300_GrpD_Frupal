@@ -1,7 +1,5 @@
 import mapMaker
-import clueMaker
 import Event
-import config
 import random
 import csv
 
@@ -85,40 +83,42 @@ class Player:
 
     """ Item Store """
     def __shopanswer(self):
-        answer = input(" Which item would you like to purchase? ")
+        answer = input("   Which item would you like to purchase? ")
         while not answer.isnumeric():
             answer = input("Please pick a number corresponding to an item or 0 to exit")
         return int(answer)
 
     def shop(self):
         print("\n --------------------------------------------")
-        print(" [$][$][$] Welcome to the Item Shop [$][$][$]\n --------------------------------------------")
-        print("              Current Gold: %d" % self.money)
+        print("|[$][$][$] Welcome to the Item Shop [$][$][$]|\n --------------------------------------------")
+        print("|             Current Gold: %4d             |" % self.money)
         print(" --------------------------------------------")
-        print(" Items Available for purchase:\n")
-        print("     1. Energy Bar -- Cost: ", self.energyBarCost, " gold")
+        print("|       Items Available for purchase:        |")
+        print("|                                            |")
+        print("|       1. Energy Bar || Cost:", self.energyBarCost, "gold        |")
 
         if self.view == 1:
-            print("     2. Binoculars -- Cost: 5 gold", )
-            i = 3
+            print("|       2. Binoculars || Cost: 5 gold        |")
         else:
-            i = 2
-
+            print("|       2. Binoculars || Already Purchased   |")
+        i = 3
         for key in self.ItemDict.keys():
             if not self.ItemDict[key]["owned"]:
-                print("     %d. %s -- Cost: %d gold" % (i, self.getKey(key), self.ItemDict[key]["cost"]))
+                print("|       %d. %-10s %s %d gold        |" % (i, self.getKey(key), "|| Cost:",
+                      self.ItemDict[key]["cost"]))
                 i += 1
             else:
-                print("     %d. %s -- Already Purchased" % (i, self.getKey(key)))
+                print("|       %d. %-10s %s" % (i, self.getKey(key), "|| Already Purchased   |"))
                 i += 1
-
-        print("\n Enter 0 to exit without making a purchase!")
+        print("|                                            |")
+        print("| Enter 0 to exit without making a purchase! |")
         print(" --------------------------------------------")
         answer = self.__shopanswer()
         while answer < 0 or answer > (i - 1):
                 answer = self.__shopanswer()
 
         if answer == 0:
+            print()
             return
 
         if answer == 1:
@@ -126,6 +126,7 @@ class Player:
                 self.money -= self.energyBarCost
                 # placeholder value
                 self.energy += 5
+                print()
                 return
             else:
                 print("Sorry you don't have enough money to purchase this item")
@@ -135,25 +136,24 @@ class Player:
                 self.money -= 5
                 # placeholder value
                 self.view += 2
+                print()
             else:
                 print("Sorry you don't have enough money to purchase this item")
                 return
         else:
-            if self.view == 1:
-                x = 3
-            else:
-                x = 2
+            x = 3
             keys = list(self.ItemDict.keys())
             if not self.ItemDict[keys[answer - x]]["owned"]:
                 if self.money >= self.ItemDict[keys[answer - x]]["cost"]:
                     self.money -= self.ItemDict[keys[answer - x]]["cost"]
                     self.ItemDict[keys[answer - x]]["owned"] = True
+                    print()
                     return
                 else:
                     print("Sorry you don't have enough money to purchase this item")
                     return
             else:
-                print("You already own this item!")
+                print(" Whoops! You already own this item. At the moment you cannot buy another.\n")
 
     """ Movement Functions """
 
