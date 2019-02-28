@@ -1,0 +1,23 @@
+CSV Layout Example
+
+// Its own thing
+Energy, 0
+MapSize, 5
+Gold, 0
+
+item, value, terrain
+Energy, 0, n
+Gold, 0, n
+Pickaxe, 0, BigRock
+Boat, 0, Water
+Binoculars, 0, n
+
+- If 'n', no terrain associated with the item
+- Not sure how to separate the gold and energy from the other items, must be
+	hard-coded elsewhere (first two items = energy/gold always)
+- Not sure if terrain could just be left 'blank', instead of have the n character
+- 'Value' for Gold/Energy means the starting amount. Otherwise it's the cost of the
+	item in the game
+
+Dictionary - Where key is the item name and value is a tuple
+	containing the value of the item and the terrain it affects
