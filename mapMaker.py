@@ -26,14 +26,14 @@ from Player import *
 # a 2-D array of map filled with terrain and object values
 
 
-def mapMaker(mapSize, addedTerrain):
+def mapMaker(mapSize, player):
 
     # initialize elements in 2-D map array to 0
     map = [[0 for x in range(mapSize)] for y in range(mapSize)] 
 
     numOfElements = mapSize * mapSize
     # need to first populate map with single use objects(i.e. jewels, binoculars...)
-    preSeededObjects = preSeedMap(map, mapSize)
+    preSeededObjects = preSeedMap(map, mapSize, player)
 
     numOfElements = numOfElements - preSeededObjects
 
@@ -43,7 +43,7 @@ def mapMaker(mapSize, addedTerrain):
             row = coord[0]
             col = coord[1]
 
-            mapObject = getMapObject()
+            mapObject = getMapObject(player)
             map[row][col] = mapObject
 
     return map
@@ -53,20 +53,19 @@ def mapMaker(mapSize, addedTerrain):
     # arg 2 = int representing map size
 # preSeedMap() returns:
     # number of unique objects placed on map (i.e. jewels, binoculars...)
-
-
-def preSeedMap(map, mapSize):
+def preSeedMap(map, mapSize, player):
     random.seed(a=None)
     objectsPlaced = 0
-    adding = 1
 
-    # only one spot for jewels
-    coord = getCoord(map, mapSize)
-    row = coord[0]
-    col = coord[1]
-    map[row][col] = 'j'
-    objectsPlaced += 1
-
+    # place the number of gems the player needs to find
+    for i in range(player.gems):
+        coord = getCoord(map, mapSize)
+        row = coord[0]
+        col = coord[1]
+        map[row][col] = 'z'
+        objectsPlaced += 1
+    return objectsPlaced
+"""
     # the larger the map size the more unique
     # objects should be placed in map
     adding = 1
@@ -93,8 +92,7 @@ def preSeedMap(map, mapSize):
             map[row][col] = 'l'
 
             objectsPlaced += 2
-
-    return objectsPlaced
+"""
 
 # getCoord() takes 1 arg.
     # arg 1 = 2-D array of map
@@ -120,18 +118,23 @@ def getCoord(map, mapSize):
     # letter representing the kind of object to fill space on map with
 
 
-def getMapObject(addedTerrain):
+def getMapObject(player):
     random.seed(a=None)
     luckyNumber = random.randrange(0, 100)
-    if addedTerrain != 0:
+    if player.newTerrain[0] != 0:
         if luckyNumber < 35:
-            pass
+            if player.newTerrain[0] == 1:
+                return player.newTerrain[1]
+            else: 
+                luckyNumber = random.randrange(1, player.newTerrain[0])
+                return player.newTerrain[luckyNumber]
             # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             # find another lucky number depending on how many terrains
             # were added and return the corresponding char.
     
     # if you didn't add from addedTerrain get another lucky number
     # and return corresponding char
+    luckyNumber = random.randrange(0, 100)
     if luckyNumber < 30:
         return 'p'
     if luckyNumber < 45:
@@ -172,7 +175,7 @@ def intro():
         print("[1]Load Game\n[2]Easy\n[3]Medium\n[4]Hard\n[5]Create New Game")
         game = input("Enter Number: ")
         if game.isnumeric():
-            if int(game) < 1 or int(game) > 5:
+            if int(game) >= 1 and int(game) <= 5:
                 pick = True
             else:
                 print("\nJust a number between 1 and 5 please\n")
@@ -180,7 +183,17 @@ def intro():
             print("\nThose aren't even numbers. How are you going to survive on Frupal??")
             print("Just a number between 1 and 5 please\n")
     
-    return game
+    return int(game)
+
+# won't need this but save it for now in case J doesn't like what I've done
+def getKeyDict(player):
+    # build a dictionary with all possible characters and what they represent
+    with open('keyDict.csv') as f:
+        reader = csv.reader(f, delimiter=',')
+        keyDict = {}
+        keyDict.update({row[0]: row[1] for row in reader})
+        print (keyDict)
+        player.initKeys(keyDict)
 
 
 def loadGame(game, player):
@@ -203,47 +216,53 @@ def loadGame(game, player):
 
 def load(fileName, player):
     # open up file and set up player and map
-
+    print ("attempting to load game")
     # open game file and read in item and terrain info. store in player object
     with open(fileName + '.csv') as f:
         reader = csv.reader(f, delimiter=',')
 
         gold = next(reader)
-        player.money = gold[1]
+        player.money = int(gold[1])
         energy = next(reader)
-        player.energy = energy[1]
+        player.energy = int(energy[1])
         size = next(reader)
-        player.mapSize = size[1]
+        player.mapSize = int(size[1])
         energyBarCost = next(reader)
-        newTerrain = []
-        newTerrain[0] = 0
+        player.energyBarCost = int(energyBarCost[1])
+        goldFound = next(reader)
+        player.goldFound = int(goldFound[1])
+        gems = next(reader)
+        player.gems = int(gems[1])
 
+        newTerrain = []
+        newTerrain.append(0)
         next(reader)
-        
+
         for row in reader:
-            # if terrain/item is used in this instance of a game
-            if row[1] == 1:
-                # if row contains a terrain
-                if row[2] == 1:
-                    player.add_to_terrain(row[0], row[3], row[6], row[7])
+                if int(row[1]) == 1:
+                    player.add_terrain(row[0], row[2], row[3], row[5])
+                    #if not standard terrain make list of addedTerrain for building map
                     if row[0] != 'w' and row[0] != 'p':
                         newTerrain[0] += 1
                         newTerrain.append(row[0])
                 # else row must contain item
                 else:
-                    player.add_to_itemlist(row[0], row[3], row[8], row[4], row[5])
-        # player.addedTerrain == newTerrain
-
-    # build a dictionary with all possible characters and what they represent
-    with open('keyDict.csv') as f:
-        reader = csv.reader(f, delimiter=',')
-
-        keyDict = {row[0]: row[1] for row in reader}
-        player.initKeys(keyDict)
+                    player.add_item(row[0], row[4], False)
+    player.newTerrain = newTerrain
+    player.initKeys()
+    player.setup()
 
 
 def getTitle():
-    with open('savedGames.txt', 'r') as f:
-        games = [row for row in reader]
-            
+    with open('savedGames.csv') as f:
+        reader = csv.reader(f, delimiter=',')
+        games = {row[0]: row[1] for row in reader}
+
+        chosen = False
+        while chosen == False: 
+            for key in games:
+                print (key, "  ", key[1])
+            choice = input("enter number corresponding to game: ")
+            chosen = True
+        return games[choice]
 

@@ -58,6 +58,10 @@ def controls():
 def main():    
     print("""Welcome to the Game!""")
 
+    testPlayer = Player.Player()
+    game = intro()
+    loadGame(game, testPlayer)
+    
     """ Testing Player class creation"""
     p = Player.Player()
     dictList = [{"e": "event"}, {"c": "clue"}, {"h": "Hammer"}, {"s": "Shovel"}, {"b": "Boat"}]
