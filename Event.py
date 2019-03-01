@@ -7,13 +7,19 @@ class Event:
     def __init__(self, name):
         self.name = name
 
-
+def read_input(message):
+    try:
+        answer=int(input(message))
+        return answer
+    except:
+        print("Please enter a valid number")
+        return read_input("> ")
 class Energy(Event):
 
     def __init__(self, name):
         super().__init__(name)
 
-    # Randomly play 1 of the 3 type of event: Trivia, math or sudden death
+    # Randomly play 1 of the 4
     def trigger(self, current, increase_by, type):
         rng = random.randint(1, 4)
         if rng == 1:
@@ -44,12 +50,7 @@ class Energy(Event):
             number1 = random.randint(1, 100)
             number2 = random.randint(1, 100)
             print(" What is ", number1, " + ", number2)
-            answer = input("> ")
-            while not answer.isnumeric():
-                print(" Please enter a number")
-                print(" What is ", number1, " + ", number2)
-                answer = input("> ")
-            answer = int(answer)
+            answer = read_input("> ")
             if answer == number1 + number2:
                 print(" Correct. Your " + type + " is increase by: ", increase_by)
                 current = current + increase_by
@@ -61,12 +62,7 @@ class Energy(Event):
             number1 = random.randint(1, 100)
             number2 = random.randint(1, 100)
             print(" What is ", number1, " - ", number2)
-            answer = input("> ")
-            while not answer.isnumeric():
-                print(" Please enter a number")
-                print(" What is ", number1, " + ", number2)
-                answer = input("> ")
-            answer = int(answer)
+            answer = read_input("> ")
             if answer == number1 - number2:
                 print(" Correct. Your " + type + " is increase by: ", increase_by)
                 current = current + increase_by
@@ -78,12 +74,7 @@ class Energy(Event):
             number1 = random.randint(1, 100)
             number2 = random.randint(1, 100)
             print(" What is ", number1, " * ", number2)
-            answer = input("> ")
-            while not answer.isnumeric():
-                print(" Please enter a number")
-                print(" What is ", number1, " * ", number2)
-                answer = input("> ")
-            answer = int(answer)
+            answer = read_input("> ")
             if answer == number1 * number2:
                 print(" Correct. Your " + type + " is increase by: ", increase_by)
                 current = current + increase_by
@@ -94,7 +85,7 @@ class Energy(Event):
         return current
 
     def trigger_trivia(self, current, increase_by, type):
-        rng = random.randint(1, 10)
+        rng = random.randint(1, 12)
         if rng == 1:
             print(" In C++, what symbol you must put at the end of a statement ?")
             answer = input("> ")
@@ -127,11 +118,7 @@ class Energy(Event):
                 input("Press enter to continue > ")
         if rng == 4:
             print(" In Counter Strike: Global Offensive, how much does the SG 553 cost ?")
-            answer = input("> ")
-            while not answer.isnumeric():
-                print(" Please enter a number")
-                answer = input("> ")
-            answer = int(answer)
+            answer = read_input("> ")
             if answer == 2750:
                 print(" Correct. Your " + type + " is increase by: ", increase_by)
                 current = current + increase_by
@@ -161,7 +148,7 @@ class Energy(Event):
                 print(" Incorrect. You miss your chance")
                 input("Press enter to continue > ")
 
-        if rng == 6:
+        if rng == 7:
             print(" What type of animal is a horny toad?")
             answer = input("> ")
             if answer.capitalize() == "Lizard":
@@ -172,7 +159,7 @@ class Energy(Event):
                 print(" Incorrect. You miss your chance")
                 input("Press enter to continue > ")
 
-        if rng == 7:
+        if rng == 8:
             print(" What type of animal is a mountain chicken ?")
             answer = input("> ")
             if answer.capitalize() == "Frog":
@@ -183,7 +170,7 @@ class Energy(Event):
                 print(" Incorrect. You miss your chance")
                 input("Press enter to continue > ")
 
-        if rng == 8:
+        if rng == 9:
             print(" What letter is defined as the square root of -1?")
             answer = input("> ")
             if answer == "i":
@@ -194,7 +181,7 @@ class Energy(Event):
                 print(" Incorrect. You miss your chance")
                 input("Press enter to continue > ")
 
-        if rng == 9:
+        if rng == 10:
             print(" What is the weight of 1 liter of water in kilogram ?")
             answer = input("> ")
             if answer == "1":
@@ -205,7 +192,7 @@ class Energy(Event):
                 print(" Incorrect. You miss your chance")
                 input("Press enter to continue > ")
 
-        if rng == 9:
+        if rng == 11:
             print(" What is the name of the university that Bill Gate dropped out of")
             answer = input("> ")
             if answer.capitalize() == "Harvard":
@@ -216,7 +203,7 @@ class Energy(Event):
                 print(" Incorrect. You miss your chance")
                 input("Press enter to continue > ")
 
-        if rng == 10:
+        if rng == 12:
             print(" In a regular deck of cards, which is the only king without a moustache ?")
             answer = input("> ")
             if answer.capitalize() == "Heart":
@@ -337,11 +324,7 @@ class Energy(Event):
         print("     2-Medium. No modification to the reward")
         print("     3-Hard. Double the reward")
         print(" If you enter a number smaller than 1 or larger than 3, you will lose this event immediately!!")
-        choice = input("> ")
-        while not choice.isnumeric():
-            print(" Please enter a number")
-            choice = input("> ")
-        choice = int(choice)
+        choice = read_input("> ")
         if choice < 1 or choice > 3:
             print(" Haha, just kidding. You are a dare devil. Your reward is:", increase_by, "" + type)
             current = current + increase_by
@@ -350,7 +333,7 @@ class Energy(Event):
             print(" You chose Easy difficult")
             rng = random.randint(1, 2)
             print(" I'm thinking a number between 1 and 2. Guess which number I'm thinking of")
-            answer = int(input("> "))
+            answer = read_input("> ")
             if answer == rng:
                 print(" Correct ! Your " + type + " is increase by: ", int(increase_by/2))
                 current = current + int(increase_by/2)
@@ -363,7 +346,7 @@ class Energy(Event):
             print(" You chose Medium difficult")
             rng = random.randint(1, 3)
             print(" I'm thinking a number between 1 and 3. Guess which number I'm thinking of")
-            answer = int(input("> "))
+            answer = read_input("> ")
             if answer == rng:
                 print(" Correct. Your " + type + " is increase by: ", increase_by)
                 current += increase_by
@@ -376,7 +359,7 @@ class Energy(Event):
             print(" You chose Hard difficult")
             rng = random.randint(1, 4)
             print("I'm thinking a number between 1 and 4. Guess which number I'm thinking of")
-            answer = int(input("> "))
+            answer = read_input("> ")
             if answer == rng:
                 print(" Correct. Your " + type + " is increase by: ", increase_by * 2)
                 current = current + increase_by * 2
