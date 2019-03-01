@@ -97,7 +97,7 @@ class Player:
     def __shopanswer(self):
         answer = input("   Which item would you like to purchase? ")
         while not answer.isnumeric():
-            answer = input("Please pick a number corresponding to an item or 0 to exit")
+            answer = input(" Please pick a number corresponding to an item or 0 to exit ")
         return int(answer)
 
     def shop(self):
@@ -141,7 +141,7 @@ class Player:
                 print()
                 return
             else:
-                print("Sorry you don't have enough money to purchase this item")
+                print(" Sorry you don't have enough money to purchase this item")
                 return
         elif answer == 2 and self.view == 2:
             if self.money >= 90:
@@ -150,7 +150,7 @@ class Player:
                 self.view += 1
                 print()
             else:
-                print("Sorry you don't have enough money to purchase this item")
+                print(" Sorry you don't have enough money to purchase this item")
                 return
         else:
             x = 3
@@ -162,7 +162,7 @@ class Player:
                     print()
                     return
                 else:
-                    print("Sorry you don't have enough money to purchase this item")
+                    print(" Sorry you don't have enough money to purchase this item")
                     return
             else:
                 print(" Whoops! You already own this item. At the moment you cannot buy another.\n")
@@ -197,7 +197,7 @@ class Player:
     def move_to(self, coords, referenceMap):
         key = referenceMap[coords[0]][coords[1]]
         if key not in list(self.terrainDict.keys()) + ['e', '*', '$', 'c', ' ']:
-            print("Map contains an unknown character")
+            print(" Map contains an unknown character")
             return -1
         else:
             # if the location contains a gem
@@ -208,8 +208,9 @@ class Player:
                 for index, location in enumerate(self.gemList):
                     if location == [coords[0], coords[1]]:
                         self.gemList.remove(location)
-                print("Wow! You managed to find one of the hidden island gems!!!")
-                print("Collected Gems: %d/%d" % (self.gems, self.totalGems))
+                print(" Wow! You managed to find one of the hidden island gems!!!")
+                print(" Collected Gems: %d/%d" % (self.gems, self.totalGems))
+                input("Press enter to continue > ")
                 return 1
 
             if key == "$":
@@ -234,7 +235,8 @@ class Player:
                             self.location = coords
                             return 1
                         else:
-                            print("Sadly you don't have the energy to continue in this direction")
+                            print(" Sadly you don't have the energy to continue in this direction")
+                            input("Press enter to continue > ")
                             return 0
                     else:
                         if self.energy >= energy:
@@ -242,7 +244,8 @@ class Player:
                             self.location = coords
                             return 1
                         else:
-                            print("Sadly you don't have the energy to continue in this direction")
+                            print(" Sadly you don't have the energy to continue in this direction")
+                            input("Press enter to continue > ")
                             return 0
                 else:
                     if self.energy >= energy:
@@ -250,14 +253,15 @@ class Player:
                         self.location = coords
                         return 1
                     else:
-                        print("Sadly you don't have the energy to continue in this direction")
+                        print(" Sadly you don't have the energy to continue in this direction")
+                        input("Press enter to continue > ")
                         return 0
 
             # block for stepping on an event
             elif key == "e":
                 self.location = coords
                 referenceMap[coords[0]][coords[1]] = 'p'
-                print("You have encountered an event!")
+                print(" You have encountered an event!")
                 event = Event.Energy("event")
                 eventType = random.randint(1, 2)
                 if eventType == 1:  # 1 signifies energy event
@@ -275,11 +279,12 @@ class Player:
             elif key == "c":
                 for clue in self.clues:
                     if clue[0][0] == coords[0] and clue[0][1] == coords[1]:
-                        print("You Have found a clue to the location of a gem!")
-                        print("The clue reads: ", clue[1])
-                        print("There's a chance this clue could be fake. If the following statement is true, the clue"
-                              " is correct")
-                        print(clue[2])
+                        print("\n You Have found a clue to the location of a gem!")
+                        print("\n   The clue reads: ", clue[1])
+                        print("\n There's a chance this clue could be fake. If the following statement is true,"
+                              " the clue is correct")
+                        print("\n  ", clue[2], "\n")
+                        input("Press enter to continue > ")
                         self.clues.pop(self.clues.index(clue))
                         referenceMap[coords[0]][coords[1]] = 'p'
                         break
@@ -289,4 +294,5 @@ class Player:
             else:
                 print(key, "is somehow not a terrain, event, clue, or gem. Something has gone wrong setting up the "
                            "game")
+                input("Press enter to continue > ")
                 return -1

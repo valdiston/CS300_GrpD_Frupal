@@ -139,17 +139,17 @@ def createStringLists(islandMap, jewelList, clueList, terrainList, real):
     for i in range(0, len(jewelList)):
         jewelDir, jewelDist = distFromCoord(clueList[i], jewelList[i])
         terrainDir, terrainDist = distFromCoord(clueList[i], terrainList[i])
-        jewelString += ["A Jewel is " + str(jewelDist) + " to the " + jewelDir]
+        jewelString += ["A Jewel is " + str(jewelDist) + " to the " + jewelDir + " of this clue"]
         if real:
             terrainString += ["The block " + str(terrainDist) + " blocks to the " + terrainDir +
-                              " is a: " + findTerrain(islandMap, terrainList[i])]
+                              " of this clue is a: " + findTerrain(islandMap, terrainList[i])]
         else:
             randTerrainOptions = 'pwgue'
             randTerrain = random.choice(randTerrainOptions)
             while randTerrain == findTerrain(islandMap, terrainList[i]):
                 randTerrain = random.choice(randTerrainOptions)
             terrainString += ["The block " + str(terrainDist) + " blocks to the " + terrainDir +
-                              " is a: " + randTerrain]
+                              " of this clue is a: " + randTerrain]
 
     return jewelString, terrainString
 
