@@ -15,6 +15,7 @@ class Player:
         self.totalGems = 0
         self.energyBarCost = 0
         self.goldFound = 0
+        self.binocularCost = 0
         self.newTerrain = []
         # default field of view
         self.view = 2
@@ -31,6 +32,7 @@ class Player:
         """ Current Location """
         self.location = [0, 0]
 
+
         """ Dictionary of character/key pairs - for converting map items to real items """
         self.keyDict = {}  # format: {"map_char": "item/terrain", }
 
@@ -43,6 +45,9 @@ class Player:
     def setup(self):
         self.refMap = mapMaker.mapMaker(self.mapSize, self)
         self.dispMap = [[' '] * self.mapSize for i in range(self.mapSize)]
+        self.location = [random.randint(0, self.mapSize - 1), random.randint(0, self.mapSize - 1)]
+        while self.refMap[self.location[0]][self.location[1]] == '*':
+            self.location = [random.randint(0, self.mapSize - 1g), random.randint(0, self.mapSize - 1)]
         self.generateClues()
 
     def generateClues(self):
@@ -110,7 +115,7 @@ class Player:
         print("|       1. Energy Bar || Cost: %-3s Gold      |" % self.energyBarCost)
 
         if self.view == 2:
-            print("|       2. Binoculars || Cost: %-3s Gold      |" % 90)
+            print("|       2. Binoculars || Cost: %-3s Gold      |" % self.binocularCost)
         else:
             print("|       2. Binoculars || Already Purchased   |")
         i = 3
@@ -144,8 +149,8 @@ class Player:
                 print(" Sorry you don't have enough money to purchase this item")
                 return
         elif answer == 2 and self.view == 2:
-            if self.money >= 90:
-                self.money -= 90
+            if self.money >= self.binocularCost:
+                self.money -= self.binocularCost
                 # placeholder value
                 self.view += 1
                 print()
