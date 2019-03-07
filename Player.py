@@ -47,7 +47,7 @@ class Player:
         self.dispMap = [[' '] * self.mapSize for i in range(self.mapSize)]
         self.location = [random.randint(0, self.mapSize - 1), random.randint(0, self.mapSize - 1)]
         while self.refMap[self.location[0]][self.location[1]] == '*':
-            self.location = [random.randint(0, self.mapSize - 1g), random.randint(0, self.mapSize - 1)]
+            self.location = [random.randint(0, self.mapSize - 1), random.randint(0, self.mapSize - 1)]
         self.generateClues()
 
     def generateClues(self):
