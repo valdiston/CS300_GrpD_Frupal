@@ -1,0 +1,12 @@
+gold,100
+energy,250
+mapSize,40
+energyCost,4
+goldFound,10
+gems,10
+key, terrain, energy, item, cost, item energy
+w, 1, 1, b, 0, 0
+p, 1, 1, 0, 0, 1
+f, 1, 3, s, 0, 1
+b, 0, 0, 0, 20, 0
+s, 0, 0, 0, 10, 0
