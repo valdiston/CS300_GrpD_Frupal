@@ -107,7 +107,8 @@ class Player:
 
     def shop(self):
         print("\n [XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX]")
-        print(" [X] [$][$] Welcome to the Item Shop [$][$] [X]\n [XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX]")
+        print(" [X] [$][$] Welcome to the Item Shop [$][$] [X]")
+        print(" [XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX]")
         print(" [X]           Current Gold: %4d           [X]" % self.money)
         print(" [XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX]")
         print(" [X]                                        [X]")
