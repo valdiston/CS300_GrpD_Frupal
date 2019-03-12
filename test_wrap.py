@@ -165,16 +165,23 @@ def main():
     if testPlayer.gems == testPlayer.totalGems:
         os.system('cls' if os.name == 'nt' else 'clear')
         print("\n Congratulations, You have collected all of the Gems on the Island and completed the game !!!\n\n")
+        input(" enter any key to exit the game> ")
     elif testPlayer.energy == 0 and testPlayer.money == 0:
         os.system('cls' if os.name == 'nt' else 'clear')
         print("\n\n         Oh No, you have run out of Money and Energy. With no alternatives left you slowly parish "
               "and die!", "\n\n\n                                                   You Lose!",
               "\n\n\n If you can't win any other way! - enter 'i am a dirty cheater' at the movement prompt to "
               "automatically win the game.\n\n")
+        input(" enter any key to exit the game> ")
     else:
         os.system('cls' if os.name == 'nt' else 'clear')
         print("\n Thanks for playing. Sorry you were not able to complete the game before quiting.\n\n")
+        input(" enter any key to exit the game> ")
 
 
 if __name__ == '__main__':
-    main()
+    try:
+        main()
+    except Exception as e:
+        print(e)
+        input()

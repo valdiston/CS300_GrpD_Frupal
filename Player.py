@@ -100,36 +100,38 @@ class Player:
 
     """ Item Store """
     def __shopanswer(self):
-        answer = input("   Which item would you like to purchase? ")
+        answer = input("\n  Which item would you like to purchase?> ")
         while not answer.isnumeric():
             answer = input(" Please pick a number corresponding to an item or 0 to exit ")
         return int(answer)
 
     def shop(self):
-        print("\n --------------------------------------------")
-        print("|[$][$][$] Welcome to the Item Shop [$][$][$]|\n --------------------------------------------")
-        print("|             Current Gold: %4d             |" % self.money)
-        print(" --------------------------------------------")
-        print("|       Items Available for purchase:        |")
-        print("|                                            |")
-        print("|       1. Energy Bar || Cost: %-3s Gold      |" % self.energyBarCost)
+        print("\n [XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX]")
+        print(" [X] [$][$] Welcome to the Item Shop [$][$] [X]\n [XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX]")
+        print(" [X]           Current Gold: %4d           [X]" % self.money)
+        print(" [XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX]")
+        print(" [X]                                        [X]")
+        print(" [X]     Items Available for purchase:      [X]")
+        print(" [X]                                        [X]")
+        print(" [X]    1. Energy Bar || Cost: %-3s Gold     [X]" % self.energyBarCost)
 
         if self.view == 2:
-            print("|       2. Binoculars || Cost: %-3s Gold      |" % self.binocularCost)
+            print(" [X]    2. Binoculars || Cost: %-3s Gold     [X]" % self.binocularCost)
         else:
-            print("|       2. Binoculars || Already Purchased   |")
+            print(" [X]    2. Binoculars || Already Purchased  [X]")
         i = 3
         for key in self.ItemDict.keys():
             if not self.ItemDict[key]["owned"]:
-                print("|       %d. %-10s %s %-3s Gold      |" % (i, self.getKey(key), "|| Cost:",
+                print(" [X]    %d. %-10s %s %-3s Gold     [X]" % (i, self.getKey(key), "|| Cost:",
                       self.ItemDict[key]["cost"]))
                 i += 1
             else:
-                print("|       %d. %-10s %s" % (i, self.getKey(key), "|| Already Purchased   |"))
+                print(" [X]    %d. %-10s %s" % (i, self.getKey(key), "|| Already Purchased  [X]"))
                 i += 1
-        print("|                                            |")
-        print("| Enter 0 to exit without making a purchase! |")
-        print(" --------------------------------------------")
+        print(" [X]                                        [X]")
+        print(" [XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX]")
+        print(" [X]   Enter 0 to exit without a purchase!  [X]")
+        print(" [XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX]")
         answer = self.__shopanswer()
         while answer < 0 or answer > (i - 1):
                 answer = self.__shopanswer()
