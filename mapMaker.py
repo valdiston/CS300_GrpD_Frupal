@@ -286,7 +286,10 @@ def load(fileName, player):
                 else:
                     player.add_item(row[0].strip(), row[4].strip(), False)
     player.newTerrain = newTerrain
-    player.initKeys()
+    if fileName not in ['easy', 'medium', 'hard']:
+        player.initKeys(fileName)
+    else:
+        player.initKeys()
     player.setup()
 
 

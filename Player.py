@@ -59,10 +59,15 @@ class Player:
 
     """ Key related functions"""
     # takes in a list of {"map_char": "item/terrain"}
-    def initKeys(self):
-        with open('keyDict.csv') as f:
-            reader = csv.reader(f, delimiter=',')
-            self.keyDict.update({row[0].strip(): row[1].strip().capitalize() for row in reader})
+    def initKeys(self, file=None):
+        if file is not None:
+            with open(file + 'keyDict.csv') as f:
+                reader = csv.reader(f, delimiter=',')
+                self.keyDict.update({row[0].strip(): row[1].strip().capitalize() for row in reader})
+        else:
+            with open('keyDict.csv') as f:
+                reader = csv.reader(f, delimiter=',')
+                self.keyDict.update({row[0].strip(): row[1].strip().capitalize() for row in reader})
 
     # returns the corresponding key string related to the reference map character
     def getKey(self, character):
