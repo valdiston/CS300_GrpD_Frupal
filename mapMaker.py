@@ -235,11 +235,7 @@ def loadGame(game, player):
     if game == 4:
         load("hard", player)
     if game == 5:
-        try:
-            load("custom", player)
-        except FileNotFoundError:
-            print("It looks like you don't have an previous saved custom games!")
-            intro()
+        load("custom", player)
         # # circle back and do an input check
         # title = input("what do you want your game to be called: ")
         # # edit_csv()

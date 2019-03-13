@@ -194,7 +194,7 @@ class Player:
         print(" [x] %-16s | Collect all of them to win the game!                        [x]" % "* = Gem")
         print(" [x] %-16s | A Clue that directs you to a gems location                  [x]" % "c = Clue")
         print(" [x] %-16s | Gives money or energy if completed  successfully            [x]" % "e = Event")
-        print(" [x] %-16s | Provides %d gold when stepped on                            [x]" % ("$ = Sack of gold",
+        print(" [x] %-16s | Provides %-3d gold when stepped on                           [x]" % ("$ = Sack of gold",
                                                                                            self.goldFound))
         print(" [xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx]")
         print(" %-20s | Energy Cost: | Shop Item:      |  Energy Cost w/ Item: |    [x]" % "[x] Terrain:")

@@ -57,7 +57,12 @@ def main():
 
     NewPlayer = Player.Player()
     game = intro()
-    loadGame(game, NewPlayer)
+    try:
+        loadGame(game, NewPlayer)
+    except FileNotFoundError:
+        print("\nIt looks like you don't have an previous saved custom games!")
+        input("press any key to continue (game will exit)>")
+        return
 
     os.system('mode con: cols=120 lines=%s' % (30 + NewPlayer.mapSize))
     Display(NewPlayer)
