@@ -14,6 +14,7 @@ class Player:
         self.gems = 0
         self.totalGems = 0
         self.energyBarCost = 0
+        self.energyBar = 0
         self.goldFound = 0
         self.binocularCost = 0
         self.newTerrain = []
@@ -51,7 +52,7 @@ class Player:
         self.generateClues()
 
     def generateClues(self):
-        self.gemList, clueList, terrainList, jewelString, terrainString = clueMaker.generateClues(self.refMap, 0,
+        self.gemList, clueList, terrainList, jewelString, terrainString = clueMaker.generateClues(self.refMap, self.totalGems,
                                                                                                   self.mapSize)
         for x in range(0, len(clueList)):
             self.clues.append([clueList[x], jewelString[x], terrainString[x]])
@@ -150,11 +151,12 @@ class Player:
             if self.money >= self.energyBarCost:
                 self.money -= self.energyBarCost
                 # placeholder value
-                self.energy += 5
+                self.energy += self.energyBar
                 print()
                 return
             else:
                 print(" Sorry you don't have enough money to purchase this item")
+                input("Press enter to continue > ")
                 return
         elif answer == 2 and self.view == 2:
             if self.money >= self.binocularCost:
@@ -164,6 +166,7 @@ class Player:
                 print()
             else:
                 print(" Sorry you don't have enough money to purchase this item")
+                input("Press enter to continue > ")
                 return
         else:
             x = 3
@@ -176,34 +179,35 @@ class Player:
                     return
                 else:
                     print(" Sorry you don't have enough money to purchase this item")
+                    input("Press enter to continue > ")
                     return
             else:
                 print(" Whoops! You already own this item. At the moment you cannot buy another.\n")
 
     """ Legend Function """
     def legend(self):
-        print(" [xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx]")
-        print(" [x]                               Game Legend                                 [x]")
-        print(" [xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx]")
-        print(" %-20s | Information:                                           [x]" % "[x] Special:")
-        print(" [xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx]")
-        print(" [x] %-16s | Collect all of them to win the game!                   [x]" % "* = Gem")
-        print(" [x] %-16s | A Clue that directs you to a gems location             [x]" % "c = Clue")
-        print(" [x] %-16s | Gives money or energy if completed  successfully       [x]" % "e = Event")
-        print(" [x] %-16s | Provides %d gold when stepped on                       [x]" % ("$ = Sack of gold",
+        print(" [xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx]")
+        print(" [x]                               Game Legend                                      [x]")
+        print(" [xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx]")
+        print(" %-20s | Information:                                                [x]" % "[x] Special:")
+        print(" [xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx]")
+        print(" [x] %-16s | Collect all of them to win the game!                        [x]" % "* = Gem")
+        print(" [x] %-16s | A Clue that directs you to a gems location                  [x]" % "c = Clue")
+        print(" [x] %-16s | Gives money or energy if completed  successfully            [x]" % "e = Event")
+        print(" [x] %-16s | Provides %d gold when stepped on                            [x]" % ("$ = Sack of gold",
                                                                                            self.goldFound))
-        print(" [xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx]")
-        print(" %-20s | Energy Cost: | Shop Item: |  Energy Cost w/ Item: |    [x]" % "[x] Terrain:")
-        print(" [xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx]")
+        print(" [xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx]")
+        print(" %-20s | Energy Cost: | Shop Item:      |  Energy Cost w/ Item: |    [x]" % "[x] Terrain:")
+        print(" [xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx]")
         for terrain in self.terrainDict.keys():
             if self.terrainDict[terrain]["item"] != '0':
-                print(" [x] %s = %-12s |       %-6d |    %-7s |            %-10s |    [x]"
+                print(" [x] %s = %-12s |       %-6d |    %-12s |            %-10s |    [x]"
                       % (terrain, self.getKey(terrain), int(self.terrainDict[terrain]["energy"]),
                          self.getKey(self.terrainDict[terrain]["item"]), self.terrainDict[terrain]["item energy"]))
             else:
-                print(" [x] %s = %-12s |       %-6d |    None    |           N/A         |    [x]" % (terrain,
+                print(" [x] %s = %-12s |       %-6d |    None         |           N/A         |    [x]" % (terrain,
                       self.getKey(terrain),int(self.terrainDict[terrain]["energy"])))
-        print(" [xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx]\n")
+        print(" [xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx]\n")
 
     """ Movement Functions """
 

@@ -1,12 +1,19 @@
-gold,100
+gold,200
 energy,250
 mapSize,40
-energyCost,4
-goldFound,10
 gems,10
+energyCost,8
+energyBar,10
+goldFound,10
+binocularCost,150
 key, terrain, energy, item, cost, item energy
-w, 1, 1, b, 0, 0
-p, 1, 1, 0, 0, 1
-f, 1, 3, s, 0, 1
+w, 1, 8, b, 0, 2
+p, 1, 2, 0, 0, 1
+f, 1, 5, s, 0, 1
+r, 1, 6, j, 0, 3
+t, 1, 4, 0, 0, 1
+i, 1, 7, 1, 0, 4
+1, 0, 0, 0, 25, 0
+j, 0, 0, 0, 30, 0
 b, 0, 0, 0, 20, 0
 s, 0, 0, 0, 10, 0

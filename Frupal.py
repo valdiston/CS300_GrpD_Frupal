@@ -5,8 +5,8 @@ import os
 
 def Display(player):
     os.system('cls' if os.name == 'nt' else 'clear')
-    print("\n Current Money: %-5s Current Energy: %-5s Gems: %d/%d\n" % (player.money, player.energy, int(player.gems),
-                                                                         int(player.totalGems)))
+    print("\n %sCurrent Money: %-5s Current Energy: %-5s Gems: %d/%d\n" % (' ' * (player.mapSize//3), player.money,
+          player.energy, int(player.gems), int(player.totalGems)))
     print("     XX" + ("X" * (player.mapSize * 2)) + "X")
     for i in range(0, player.mapSize):
         print("     X", end=' ')
@@ -22,10 +22,13 @@ def Display(player):
                 print(str(player.dispMap[i][j]), end=' ')
         print("X", end=' ')
         print("")
-    print("     XX" + ("X" * (player.mapSize * 2)) + "X\n\n")
+    print("     XX" + ("X" * (player.mapSize * 2)) + "X\n")
+    print(" %s Press h to display the help menu\n" % (' ' * (player.mapSize//3)))
 
 
 def cheat(player):
+    player.energy = 1000000
+    player.money = 1000000
     while len(player.gemList) > 0:
         Display(player)
         player.move_to(player.gemList[0], player.refMap)
@@ -35,7 +38,6 @@ def cheat(player):
 def controls():
     print(" Please enter   w   to walk\n"
           + "              a s d\n"
-          + " Press h for help\n"
           + " Press q to quit\n"
           + " Press x to display map\n"
           + " Press p to shop\n"
@@ -57,6 +59,7 @@ def main():
     game = intro()
     loadGame(game, NewPlayer)
 
+    os.system('mode con: cols=120 lines=%s' % (30 + NewPlayer.mapSize))
     Display(NewPlayer)
     controls()
     # input("Press enter to continue > ")

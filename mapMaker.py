@@ -18,6 +18,7 @@
 import random
 import csv
 from Player import *
+from adminPanel import save
 
 # mapMaker() takes two args:
 # arg 1 == int representing map size
@@ -120,13 +121,13 @@ def getCoord(map, mapSize):
 
 def getMapObject(player):
     random.seed(a=None)
-    luckyNumber = random.randrange(0, 100)
+    luckyNumber = random.randrange(0, 1000)
     if player.newTerrain[0] != 0:
-        if luckyNumber < 35:
+        if luckyNumber < 350:
             if player.newTerrain[0] == 1:
                 return player.newTerrain[1]
             else: 
-                luckyNumber = random.randrange(1, player.newTerrain[0])
+                luckyNumber = random.randrange(1, int(player.newTerrain[0]) + 1)
                 return player.newTerrain[luckyNumber]
             # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             # find another lucky number depending on how many terrains
@@ -134,26 +135,15 @@ def getMapObject(player):
     
     # if you didn't add from addedTerrain get another lucky number
     # and return corresponding char
-    luckyNumber = random.randrange(0, 100)
-    # if luckyNumber < 30:
-    #     return 'p'
-    # if luckyNumber < 45:
-    #     return 'w'
-    # if luckyNumber < 60:
-    #     return '$'
-    # if luckyNumber < 80:
-    #     return 'c'
-    # if luckyNumber < 100:
-    #     return 'e'
-    if luckyNumber < 30:
+    luckyNumber = random.randrange(0, 1000)
+
+    if luckyNumber < 200:
         return 'e'
-    # if luckyNumber < 45:
-    #     return 'c'
-    if luckyNumber < 60:
-        return 'w'
-    if luckyNumber < 80:
+    if luckyNumber < 300:
         return '$'
-    if luckyNumber < 100:
+    if luckyNumber < 600:
+        return 'w'
+    else:
         return 'p'
 
 
@@ -209,7 +199,7 @@ def intro():
     print("Would you like to load a game or Easy, Medium or Hard game...\nOr would you like to make your own game?")
     pick = False
     while not pick:
-        print("[1]Load Game\n[2]Easy\n[3]Medium\n[4]Hard\n[5]Create New Game")
+        print("[1]Custom Game\n[2]Easy\n[3]Medium\n[4]Hard\n[5]Load Last Custom Game")
         game = input("Enter Number: ")
         if game.isnumeric():
             if int(game) >= 1 and int(game) <= 5:
@@ -229,14 +219,15 @@ def getKeyDict(player):
         reader = csv.reader(f, delimiter=',')
         keyDict = {}
         keyDict.update({row[0]: row[1] for row in reader})
-        print (keyDict)
+        print(keyDict)
         player.initKeys(keyDict)
 
 
 def loadGame(game, player):
     if game == 1:
-        title = getTitle()
-        load(title, player)
+        # title = getTitle()
+        save()
+        load("custom", player)
     if game == 2:
         load("easy", player)
     if game == 3:
@@ -244,11 +235,16 @@ def loadGame(game, player):
     if game == 4:
         load("hard", player)
     if game == 5:
-        # circle back and do an input check
-        title = input("what do you want your game to be called: ")
-        # edit_csv()
-        # edit_csv_tuple()
-        load(title, player)
+        try:
+            load("custom", player)
+        except FileNotFoundError:
+            print("It looks like you don't have an previous saved custom games!")
+            intro()
+        # # circle back and do an input check
+        # title = input("what do you want your game to be called: ")
+        # # edit_csv()
+        # # edit_csv_tuple()
+        # load(title, player)
 
 
 def load(fileName, player):
@@ -264,12 +260,17 @@ def load(fileName, player):
         player.energy = int(energy[1])
         size = next(reader)
         player.mapSize = int(size[1])
-        energyBarCost = next(reader)
-        player.energyBarCost = int(energyBarCost[1])
-        goldFound = next(reader)
-        player.goldFound = int(goldFound[1])
         gems = next(reader)
         player.totalGems = int(gems[1])
+        energyBarCost = next(reader)
+        player.energyBarCost = int(energyBarCost[1])
+        energyBar = next(reader)
+        player.energyBar = int(energyBar[1])
+        goldFound = next(reader)
+        player.goldFound = int(goldFound[1])
+        binocularCost = next(reader)
+        player.binocularCost = int(binocularCost[1])
+
 
         newTerrain = []
         newTerrain.append(0)
