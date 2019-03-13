@@ -29,10 +29,11 @@ def Display(player):
 def cheat(player):
     player.energy = 1000000
     player.money = 1000000
-    while len(player.gemList) > 0:
+    while len(player.gemList) > player.gems:
         Display(player)
         player.move_to(player.gemList[0], player.refMap)
-        # sleep(2)
+    player.dispMap = player.refMap
+    Display(player)
 
 
 def controls():
@@ -41,19 +42,12 @@ def controls():
           + " Press q to quit\n"
           + " Press x to display map\n"
           + " Press p to shop\n"
-          + " Press l to display the legend\n")
+          + " Press l to display the legend\n"
+          + " If you can't win otherwise pressing c will auto win the game\n")
 
 
 def main():
     print("""Welcome to the Game!""")
-
-    # #we'll need a menu for the user to choose preloaded games ie. easy, med, saved games...
-    # #I'll use that to open up the correct file.
-    # fileName = "config"
-    # NewPlayer = Player()
-    # blankMap  = [ [0]* MAP_SIZE for i in range(MAP_SIZE) ]
-    # print ("about to load game")
-    # loadGame(fileName, NewPlayer, blankMap)
 
     NewPlayer = Player.Player()
     game = intro()
@@ -67,7 +61,7 @@ def main():
     os.system('mode con: cols=120 lines=%s' % (30 + NewPlayer.mapSize))
     Display(NewPlayer)
     controls()
-    # input("Press enter to continue > ")
+    print(" Your Player character is represented as an \'@\' in this game. This symbol will move around as you move!\n")
 
     while NewPlayer.gems < NewPlayer.totalGems:
         if NewPlayer.energy == 0 and NewPlayer.money == 0:
@@ -91,9 +85,9 @@ def main():
             NewPlayer.legend()
         elif choice == "i am a dirty cheater":
             cheat(NewPlayer)
-        elif choice == "test":
-            NewPlayer.energy = 0
-            NewPlayer.money = 0
+        elif choice == 'c':
+            cheat(NewPlayer)
+
 
         #########################################
         #           Update Status of Hero       #
